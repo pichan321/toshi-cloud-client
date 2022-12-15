@@ -1,0 +1,12 @@
+.progress-bar-container {
+    width: 100vw;
+    height: 5px;
+    border-radius: 15px;
+  
+}
+
+.progress {
+    height: 100%;
+    border-radius: 15px;
+    background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(136,178,217,1) 100%);
+}
