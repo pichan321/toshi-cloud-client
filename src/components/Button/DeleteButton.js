@@ -1,22 +1,23 @@
 import React from "react";
 import Button from 'rsuite/Button';
+import { useState } from "react";
+import {get, API_URL} from '../../utils/API'
 
-export default class DownloadButton extends React.Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-        loading: false
+export default function DeleteButton({getFiles, file}) {
+    const [loading, setLoading] = useState(false)
+
+    async function deleteFile(file) {
+      setLoading(true)
+      try {
+        var response = await get(`${API_URL}/delete/${file.uuid}`)
+        getFiles()
+      } catch {
+        return
       }
-      this.btnClickedHandler = this.btnClickedHandler.bind(this);
+      setLoading(false)
     }
-    btnClickedHandler() {
-        this.setState({loading: true})
-        this.props.clicked(this.props.data);
-        setTimeout(() => { this.setState({loading: false}) }, 1000)
-    }
-    render() {
+
       return (
-        <Button appearance="primary" color="red" onClick={this.btnClickedHandler} loading={this.state.loading}>Delete</Button>
+        <Button appearance="primary" color="red" onClick={() => deleteFile(file)} loading={loading} style={{color: "black", fontWeight: "bold"}}>Delete</Button>
       )
-    }
   }

@@ -22,6 +22,8 @@ import Login from './pages/Login/Login';
 import { userActions } from './utils/Slices/userSlice';
 import {useDispatch, useSelector} from 'react-redux';
 import Main from './pages/Main/Main';
+import { Routes, Route, Link, Navigate} from "react-router-dom";
+import Stream from './pages/Stream/Stream';
 
 function App() {
   const user = useSelector(state => state.user)
@@ -105,10 +107,14 @@ useEffect(() => {
 
  
 }, [files])
+
+//<div className='app'>{user.isLoggedIn ? <Main/> : <Login getFiles={getFiles}/>}</div>
   return (
-    <div className='App'>
-      {user.isLoggedIn ? <Main/> : <Login getFiles={getFiles}/>}
-    </div>
+    <Routes>
+      <Route path="/" element={    <div className='app'>{user.isLoggedIn ? <Main/> : <Login getFiles={getFiles}/>}</div>}/>
+      <Route path="/stream/:fileUuid" element={<Stream/>}/>
+    </Routes>
+
   );
 }
 

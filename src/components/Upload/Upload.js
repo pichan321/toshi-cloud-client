@@ -124,11 +124,13 @@ export default function DragDrop() {
     let end = chunkSize
     let count = 1
     let countTotal = getTotalChunk(file.size)
-    while (count <= countTotal) {
+    for (count; count <= countTotal + 1; ) {
+      if (count > countTotal) {break}
 
     const form = new FormData()
 
     form.append("file", file.slice(begin, end))
+    form.append("userUuid", user.uuid)
     const filesize = fileSize(file.size)
     const sizeMB = getTwoDecimal(file.size / 1000000.0)
     form.append("name", file.name)
@@ -165,6 +167,7 @@ export default function DragDrop() {
         console.log("TOTAl")
         console.log(chunkCount)
     } catch {
+      count = countTotal + 1
       break
     }
     }
@@ -181,15 +184,9 @@ export default function DragDrop() {
   //   console.log(progress)
   // }, [progress])
 
-
-  useEffect(() => {
-    console.log(files.map(file => console.log(file)))
-    
-  }, [files])
 // {files ? files.map(file => {return <p>{file.name}</p>}) : null}
   return (
     <div className="container-fluid">
-        <ProgressBar width={progress}/>
 
         <input id='fileUpload' type='file' multiple
         accept='*' onChange={(e) => handleChange(e)}
