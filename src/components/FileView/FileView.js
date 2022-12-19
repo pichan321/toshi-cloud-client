@@ -5,7 +5,7 @@ import UploadView from '../UploadView/UploadView'
 import { Button } from 'rsuite'
 import { useNavigate, Link } from 'react-router'
 import { stringToArray } from 'ag-grid-community'
-import { API_URL } from '../../utils/API'
+import { API_URL, CLIENT_URL } from '../../utils/API'
 
 export default function FileView({files, getFiles}) {
     const navigate = useNavigate()
@@ -13,7 +13,7 @@ export default function FileView({files, getFiles}) {
     async function viewFile(file) {
         // navigate("/stream", {state: {filename: file.name}})
         //window.open(`http://localhost:8080/stream/${file.uuid}/${file.bucketUuid}`, "_blank")
-        window.open(`http://localhost:3000/stream/${file.uuid}`, "_blank")
+        window.open(`${CLIENT_URL}/stream/${file.uuid}`, "_blank")
     }
 
     return (
