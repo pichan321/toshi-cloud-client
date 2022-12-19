@@ -30,7 +30,7 @@ export default function Login({getFiles}) {
         }
 
         try {
-            let response = await post("http://localhost:8080/register-account", registerInfo)
+            let response = await post(`${API_URL}/register-account`, registerInfo)
         } catch {
             return
         }
@@ -59,7 +59,7 @@ export default function Login({getFiles}) {
         setLoading(true)
         console.log(user)
         try {
-            let response = await post("http://localhost:8080/login", user)
+            let response = await post(`${API_URL}/login`, user)
             if (response.code === 404 || response.code === 500) {
                 setLoading(false)
                 toast.error("Wrong credentials!")

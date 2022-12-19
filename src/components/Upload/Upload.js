@@ -5,6 +5,7 @@ import Button from 'rsuite/Button';
 import './Upload.css'
 import { useSelector } from "react-redux";
 import ProgressBar from "../ProgressBar/ProgressBar";
+import { API_URL } from "../../utils/API";
 
 export default function DragDrop() {
   const [progress, setProgress] = useState("0%")
@@ -85,7 +86,7 @@ export default function DragDrop() {
     form.append("size", filesize)
     form.append("sizeMb", sizeMB)
     fetch(
-        `http://localhost:8080/upload`,
+        `${API_URL}/upload`,
         {
             method: 'POST',
             body: form,
@@ -106,7 +107,7 @@ export default function DragDrop() {
    form.append("size", filesize)
    form.append("sizeMb", sizeMB)
    var response = await fetch(
-       `http://localhost:8080/prepare-multipart-upload`,
+       `${API_URL}/prepare-multipart-upload`,
        {
            method: 'POST',
            body: form,
@@ -141,7 +142,7 @@ export default function DragDrop() {
     form.append("uploadId", uploadId)
     try {
       var response = await fetch(
-        `http://localhost:8080/multipart-upload`,
+        `${API_URL}/multipart-upload`,
         {
             method: 'POST',
             body: form,

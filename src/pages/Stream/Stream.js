@@ -1,7 +1,7 @@
 import "./Stream.css"
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
-import { get } from "../../utils/API";
+import { get, API_URL } from "../../utils/API";
 
 export default function Stream() {
     const { fileUuid } = useParams();
@@ -11,7 +11,7 @@ export default function Stream() {
     
     const getVideo = async () => {
         try {
-            let response = await get(`http://localhost:8080/stream/${fileUuid}`)
+            let response = await get(`${API_URL}/stream/${fileUuid}`)
             setLink(response.message)
         } catch {
             return

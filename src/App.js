@@ -24,6 +24,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import Main from './pages/Main/Main';
 import { Routes, Route, Link, Navigate} from "react-router-dom";
 import Stream from './pages/Stream/Stream';
+import { API_URL } from './utils/API';
 
 function App() {
   const user = useSelector(state => state.user)
@@ -56,7 +57,7 @@ function App() {
 
 
   async function getFiles() {
-    let response = await get("http://localhost:8080/get-files/" + user.uuid)
+    let response = await get(`${API_URL}/get-files/${user.uuid}`)
     setFiles(response)
   }
 
@@ -66,7 +67,7 @@ function App() {
 
   async function downloadFile(file) {
     console.log(file)
-   await fetch(`http://localhost:8080/download/${user.username}/${file.handle}`, )
+   await fetch(`${API_URL}/download/${user.username}/${file.handle}`, )
   .then(response => response.blob())
   .then(blob => {
       var url = window.URL.createObjectURL(blob);

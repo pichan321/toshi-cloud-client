@@ -55,7 +55,7 @@ export default function Main() {
     //   ]);
 
       async function getFiles() {
-        let response = await get("http://localhost:8080/get-files/" + user.uuid)
+        let response = await get(`${API_URL}/get-files/${user.uuid}`)
         setFiles(response)
       }
     

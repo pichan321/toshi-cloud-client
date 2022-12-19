@@ -5,6 +5,7 @@ import UploadView from '../UploadView/UploadView'
 import { Button } from 'rsuite'
 import { useNavigate, Link } from 'react-router'
 import { stringToArray } from 'ag-grid-community'
+import { API_URL } from '../../utils/API'
 
 export default function FileView({files, getFiles}) {
     const navigate = useNavigate()
