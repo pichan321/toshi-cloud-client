@@ -1,22 +1,32 @@
 import React from "react";
 import Button from 'rsuite/Button';
+import { useState } from "react";
+import { API_URL } from "../../utils/API";
 
-export default class DownloadButton extends React.Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-        loading: false
-      }
-      this.btnClickedHandler = this.btnClickedHandler.bind(this);
+export default function DownloadButton({getFiles, file}) {
+    const [loading, setLoading] = useState(false)
+
+    async function downloadFile(file) {
+       setLoading(true)
+       try {
+        await fetch(`${API_URL}/download/${file.uuid}`)
+        .then(response => response.json())
+        .then(response => {
+            var a = document.createElement('a');
+            a.href = response.message;
+            a.download = file.name
+            document.body.appendChild(a);
+            a.click();    
+            a.remove();  
+        });
+       } catch {
+        setLoading(false)
+        return
+       }
+     
+      getFiles()
+      setLoading(false)
     }
-    btnClickedHandler() {
-        this.setState({loading: true})
-        this.props.clicked(this.props.data);
-        setTimeout(() => { this.setState({loading: false}) }, 1000)
-    }
-    render() {
-      return (
-        <Button appearance="primary" color="green" onClick={this.btnClickedHandler} loading={this.state.loading}>Download</Button>
-      )
-    }
+    
+      return (<Button appearance="primary" color="green" onClick={() => downloadFile(file)} loading={loading} style={{color: "black", fontWeight: "bold"}}>Download</Button>)
   }

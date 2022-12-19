@@ -22,6 +22,8 @@ import { userActions } from '../../utils/Slices/userSlice';
 import {useDispatch, useSelector} from 'react-redux';
 import './Main.css'
 import ProgressBar from '../../components/ProgressBar/ProgressBar';
+import FileView from '../../components/FileView/FileView';
+import { useNavigate } from "react-router-dom";
 
 export default function Main() {
     const user = useSelector(state => state.user)
@@ -29,30 +31,31 @@ export default function Main() {
     const gridRef = useState(null)
     const [files, setFiles] = useState([])
 
-    const [columnDefs] = useState([
-        { field: "name", headerName: "File Name", type: 'leftAligned', autoHeight: true, rowHeight: 100},
-        { field: 'size', headerName: "Size", type: 'leftAligned', autoHeight: true},
-        { field: 'uploadedDate', headerName: "Date Uploaded", type: 'leftAligned', autoHeight: true},
-        {field: 'handle',
-        headerName: '' ,
-        cellRenderer:  DownloadButton, 
-        cellRendererParams: {
-          clicked: function(field) {
-            downloadFile(field)
-          }
-        }},
-        {field: 'handle',
-        headerName: '' ,
-        cellRenderer:  DeleteButton, 
-        cellRendererParams: {
-          clicked: function(field) {
-            deleteFile(field)
-          }
-        }}
-      ]);
+
+    // const [columnDefs] = useState([
+    //     { field: "name", headerName: "File Name", type: 'leftAligned', autoHeight: true, rowHeight: 100},
+    //     { field: 'size', headerName: "Size", type: 'leftAligned', autoHeight: true},
+    //     { field: 'uploadedDate', headerName: "Date Uploaded", type: 'leftAligned', autoHeight: true},
+    //     {field: 'handle',
+    //     headerName: '' ,
+    //     cellRenderer:  DownloadButton, 
+    //     cellRendererParams: {
+    //       clicked: function(field) {
+    //         downloadFile(field)
+    //       }
+    //     }},
+    //     {field: 'handle',
+    //     headerName: '' ,
+    //     cellRenderer:  DeleteButton, 
+    //     cellRendererParams: {
+    //       clicked: function(field) {
+    //         deleteFile(field)
+    //       }
+    //     }}
+    //   ]);
 
       async function getFiles() {
-        let response = await get("http://localhost:8080/get-files/" + user.uuid)
+        let response = await get(`${API_URL}/get-files/${user.uuid}`)
         setFiles(response)
       }
     
@@ -63,29 +66,9 @@ export default function Main() {
         return () => clearInterval(interval);
       }, []);
     
-      async function downloadFile(file) {
-        await fetch(`${API_URL}/download/${file.bucketUuid}/${file.uuid}`)
-      .then(response => response.blob())
-      .then(blob => {
-          var url = window.URL.createObjectURL(blob);
-          var a = document.createElement('a');
-          a.href = url;
-          a.download = file.name
-          document.body.appendChild(a);
-          a.click();    
-          a.remove();  
-      });
-      getFiles()
-      }
+     
     
-      async function deleteFile(file) {
-        try {
-          var response = await get(`${API_URL}/delete/${file.uuid}`)
-          getFiles()
-        } catch {
-          return
-        }
-      }
+    
     
       // useEffect(() => {
       //   const interval = setInterval(() => {
@@ -117,8 +100,12 @@ export default function Main() {
         dispatch(userActions.updateIsLoggedIn(false))
     }
 
+    useEffect(() => {
+      getFiles()
+    }, [])
+
     return (
-        <div className="" style={{background: "black"}}>
+        <div className="main" style={{background: "black"}}>
         <div className='logout-button-container'>
  
                 <img src="https://cdn-icons-png.flaticon.com/512/8914/8914308.png" onClick={() => logout()} className="logout-button"/>
@@ -138,13 +125,21 @@ export default function Main() {
             <div className='col-12'>
               <div className="ag-theme-alpine-dark ag-grid-container">
   
-              {files.length > 0 ?      <AgGridReact rowData={files} columnDefs={columnDefs} ref={gridRef}></AgGridReact> : null }
+              {files.length > 0 ?
+              <div className='container-fluid'>
+                <div className='row'>
+                  <FileView files={files} getFiles={getFiles}/>
+                </div>
+              </div>  
            
+      
+               : null }
+     
               </div>
             </div>
-            
+                
           </div>
-       
+                
         </div>
       </div>
     )

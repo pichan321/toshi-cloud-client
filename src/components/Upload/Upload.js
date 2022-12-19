@@ -5,6 +5,7 @@ import Button from 'rsuite/Button';
 import './Upload.css'
 import { useSelector } from "react-redux";
 import ProgressBar from "../ProgressBar/ProgressBar";
+import { API_URL } from "../../utils/API";
 
 export default function DragDrop() {
   const [progress, setProgress] = useState("0%")
@@ -85,7 +86,7 @@ export default function DragDrop() {
     form.append("size", filesize)
     form.append("sizeMb", sizeMB)
     fetch(
-        `http://localhost:8080/upload`,
+        `${API_URL}/upload`,
         {
             method: 'POST',
             body: form,
@@ -106,7 +107,7 @@ export default function DragDrop() {
    form.append("size", filesize)
    form.append("sizeMb", sizeMB)
    var response = await fetch(
-       `http://localhost:8080/prepare-multipart-upload`,
+       `${API_URL}/prepare-multipart-upload`,
        {
            method: 'POST',
            body: form,
@@ -124,11 +125,13 @@ export default function DragDrop() {
     let end = chunkSize
     let count = 1
     let countTotal = getTotalChunk(file.size)
-    while (count <= countTotal) {
+    for (count; count <= countTotal + 1; ) {
+      if (count > countTotal) {break}
 
     const form = new FormData()
 
     form.append("file", file.slice(begin, end))
+    form.append("userUuid", user.uuid)
     const filesize = fileSize(file.size)
     const sizeMB = getTwoDecimal(file.size / 1000000.0)
     form.append("name", file.name)
@@ -139,7 +142,7 @@ export default function DragDrop() {
     form.append("uploadId", uploadId)
     try {
       var response = await fetch(
-        `http://localhost:8080/multipart-upload`,
+        `${API_URL}/multipart-upload`,
         {
             method: 'POST',
             body: form,
@@ -165,6 +168,7 @@ export default function DragDrop() {
         console.log("TOTAl")
         console.log(chunkCount)
     } catch {
+      count = countTotal + 1
       break
     }
     }
@@ -181,15 +185,9 @@ export default function DragDrop() {
   //   console.log(progress)
   // }, [progress])
 
-
-  useEffect(() => {
-    console.log(files.map(file => console.log(file)))
-    
-  }, [files])
 // {files ? files.map(file => {return <p>{file.name}</p>}) : null}
   return (
     <div className="container-fluid">
-        <ProgressBar width={progress}/>
 
         <input id='fileUpload' type='file' multiple
         accept='*' onChange={(e) => handleChange(e)}
