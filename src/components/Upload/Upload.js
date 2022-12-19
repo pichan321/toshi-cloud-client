@@ -10,7 +10,7 @@ import { API_URL } from "../../utils/API";
 export default function DragDrop() {
   const [progress, setProgress] = useState("0%")
 
-  const chunkSize = 1048576 * 10;//its 3MB, increase the number measure in mb
+  const chunkSize = 1048576 * 75;//its 3MB, increase the number measure in mb
   const user = useSelector(state => state.user)
   const [files, setFiles] = useState([]);
   const [toSend, setToSend] = useState(null)
