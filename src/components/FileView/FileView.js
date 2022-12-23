@@ -6,6 +6,7 @@ import { Button } from 'rsuite'
 import { useNavigate, Link } from 'react-router'
 import { stringToArray } from 'ag-grid-community'
 import { API_URL, CLIENT_URL } from '../../utils/API'
+import { extract_filename } from '../../utils/file'
 
 export default function FileView({files, getFiles}) {
     const navigate = useNavigate()
@@ -15,6 +16,7 @@ export default function FileView({files, getFiles}) {
         //window.open(`http://localhost:8080/stream/${file.uuid}/${file.bucketUuid}`, "_blank")
         window.open(`${CLIENT_URL}/stream/${file.uuid}`, "_blank")
     }
+
 
     return (
         <div className="container-fluid file-view">
@@ -45,7 +47,7 @@ export default function FileView({files, getFiles}) {
                             <div>
                             <div className='row m-2 align-items-center'>
                         <div className='col-4'>
-                                <p>{file.name}</p>
+                                <p>{extract_filename(file.name)}</p>
                             </div>
                             <div className='col-2'>
                                 <p>{file.size}</p>
