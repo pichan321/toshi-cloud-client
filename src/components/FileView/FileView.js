@@ -7,6 +7,7 @@ import { useNavigate, Link } from 'react-router'
 import { stringToArray } from 'ag-grid-community'
 import { API_URL, CLIENT_URL } from '../../utils/API'
 import { extract_filename } from '../../utils/file'
+import {get} from '../../utils/API'
 
 export default function FileView({files, getFiles}) {
     const navigate = useNavigate()
@@ -17,12 +18,27 @@ export default function FileView({files, getFiles}) {
         window.open(`${CLIENT_URL}/stream/${file.uuid}`, "_blank")
     }
 
+    async function getFileContent(file) {
+        let response = await get(`${API_URL}/content/${file.uuid}`)
+        console.log(response)
+    }   
+    const code = `function add(a, b) {
+        return a + b;
+      }`
 
     return (
-        <div className="container-fluid file-view">
-             <div className='row justify-content-center m-3'>
-                <UploadView files={files}/>
-             </div>
+            <div>
+                <div className='container-fluid'>
+
+                    <div className='row'>
+                    <div className='col-12'>
+                        <UploadView files={files}/>
+                    </div>
+                    </div>
+
+                </div>
+          
+            <div className="container-fluid file-view">
             <div className='row justify-content-center'>
                 <div className='file-view-container'>
                 <div className='row'>
@@ -57,6 +73,7 @@ export default function FileView({files, getFiles}) {
                             </div>
                             <div className='col-1'>
                                 {String(file.name).includes(".mp4") && <Button file={file} getFiles={getFiles} appearance="primary" onClick={() => viewFile(file)} style={{color: "black", fontWeight: "bold"}}>View</Button>} 
+                                {String(file.name).includes(".txt") && <Button file={file} getFiles={getFiles} appearance="primary" onClick={() => getFileContent(file)} style={{color: "black", fontWeight: "bold"}}>View</Button>} 
                             </div>
                             <div className='col-1'>
                                 <DownloadButton file={file} getFiles={getFiles}/>
@@ -79,6 +96,6 @@ export default function FileView({files, getFiles}) {
             </div>
              
         </div>
-       
+        </div>
     )
 }

@@ -1,14 +1,17 @@
 .file-view {
     font-family: 'Poppins', sans-serif;
+    overflow-x: hidden;
 }
 
-.file-view-container {
-    width: 98vw;
-    height: 100vh;
+.file-view-container{
+    width: 98.5%;
+    height: auto;
     background: white;
     border-radius: 15px;
     color: black;
 }
+
+
 
 .line {
     height: 1px;
