@@ -1,5 +1,7 @@
 .main {
     font-family: 'Poppins', sans-serif;
+    height: auto;
+    overflow-x: hidden;
 }
 
 .logout-button-container {

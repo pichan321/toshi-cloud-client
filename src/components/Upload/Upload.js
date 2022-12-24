@@ -6,8 +6,10 @@ import './Upload.css'
 import { useSelector } from "react-redux";
 import ProgressBar from "../ProgressBar/ProgressBar";
 import { API_URL } from "../../utils/API";
-
-export default function DragDrop() {
+import Modal from "../Modal/Modal";
+import DeleteButton from "../Button/DeleteButton";
+import ParseText from "../ParseText/ParseText";
+export default function Upload() {
   const [progress, setProgress] = useState("0%")
 
   const chunkSize = 1048576 * 75;//its 3MB, increase the number measure in mb
@@ -17,13 +19,15 @@ export default function DragDrop() {
   const [size, setFileSize] = useState(0)
   const [currentCount, setCurrentCount] = useState(0)
   const [chunkCount, setChunkCount] = useState(0)
-
+  const [text, setText] = useState("")
   const [begin, setBegin] = useState(0)
   const [end, setEnd] = useState(chunkSize)
 
   const [loading, setLoading] = useState(false)
   const [part, setPart] = useState(0)
   const [uploadId, setUploadId] = useState("")
+  const [parseText, setParseText] = useState(false)
+
   const handleChange = (e) => {
     //prepareMultipartUpload(file)
     const allFiles = Array.from(e.target.files)
@@ -159,14 +163,14 @@ export default function DragDrop() {
         begin = end
         end = end + chunkSize
         count++
-        console.log("BEGIN")
-        console.log(begin)
-        console.log("END")
-        console.log(end)
-        console.log("COUNT")
-        console.log(count)
-        console.log("TOTAl")
-        console.log(chunkCount)
+        // console.log("BEGIN")
+        // console.log(begin)
+        // console.log("END")
+        // console.log(end)
+        // console.log("COUNT")
+        // console.log(count)
+        // console.log("TOTAl")
+        // console.log(chunkCount)
     } catch {
       count = countTotal + 1
       break
@@ -175,6 +179,11 @@ export default function DragDrop() {
       
   }
   const fileInputRef=useRef();
+
+  async function parseUpload() {
+    let response = await post(`${API_URL}/parse-and-upload`, {name: "No.txt", content: text, type: ".txt", user: user.uuid})
+  }
+
   // useEffect(() => {
   //   console.log(currentCount)
   //   console.log(chunkCount)
@@ -186,7 +195,12 @@ export default function DragDrop() {
   // }, [progress])
 
 // {files ? files.map(file => {return <p>{file.name}</p>}) : null}
+
+//modal-background
+//<Modal Component={null} className="modal-background"/>
   return (
+    <div>
+    {parseText && <Modal Component={ParseText} className="modal-background" close={() => setParseText(false)}/> }
     <div className="container-fluid">
 
         <input id='fileUpload' type='file' multiple
@@ -194,11 +208,24 @@ export default function DragDrop() {
         ref={fileInputRef}
         hidden
 />
-<Button onClick={()=>fileInputRef.current.click()}>
+<Button onClick={()=>fileInputRef.current.click()} className="m-3">
         <img src="https://cdn-icons-png.flaticon.com/512/2716/2716054.png" alt="" width={30} height={30}/>
         Upload
       </Button>
+      <Button  className="m-3" onClick={() => setParseText(true)}> {/**onClick={()=> parseUpload()} */}
+        <img src="https://cdn-icons-png.flaticon.com/512/3721/3721819.png" alt="" width={30} height={30}/>
+        Parse Text
+      </Button>
 
+      {/** 
+       <Button onClick={()=> null} className="m-3">
+        <img src="https://cdn-icons-png.flaticon.com/512/4997/4997543.png" alt="" width={30} height={30}/>
+        Parse Code
+      </Button>
+      */}
+     
+     
+   
 {files ? files.map(file => {return <p>{file.name}</p>}) : null}
             {/*<FileUploader handleChange={handleChange} name="file" className="uploader" label="Drop file or Click to Browse" multiple={true}/> */}
             
@@ -207,6 +234,6 @@ export default function DragDrop() {
          
   
     </div>
-
+</div>
   );
 }

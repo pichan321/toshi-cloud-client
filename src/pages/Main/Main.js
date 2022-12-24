@@ -7,7 +7,7 @@ import 'rsuite/dist/rsuite.min.css'
 import {get, post} from '../../utils/API' 
 import { AgGridReact } from 'ag-grid-react';
 import Uppy from '@uppy/core'
-import DragDrop from '../../components/Upload/Upload';
+import Upload from '../../components/Upload/Upload';
 //import ProgressBar from '@uppy/progress-bar'
 import Tus from '@uppy/tus'
 import Button from 'rsuite/Button';
@@ -115,8 +115,8 @@ export default function Main() {
           <div className='row'>
 
           </div>
-          <div className='row p-5'>
-            <DragDrop user={user}/>
+          <div className='row'>
+          <Upload user={user}/>
           </div>
         </div>
    
@@ -128,7 +128,10 @@ export default function Main() {
               {files.length > 0 ?
               <div className='container-fluid'>
                 <div className='row'>
-                  <FileView files={files} getFiles={getFiles}/>
+                  <div className='col-12'>
+                    <FileView files={files} getFiles={getFiles}/>
+                  </div>
+                
                 </div>
               </div>  
            

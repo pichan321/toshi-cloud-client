@@ -2,6 +2,7 @@ import React from "react";
 import Button from 'rsuite/Button';
 import { useState } from "react";
 import { API_URL } from "../../utils/API";
+import { extract_filename } from "../../utils/file";
 
 export default function DownloadButton({getFiles, file}) {
     const [loading, setLoading] = useState(false)
@@ -14,7 +15,8 @@ export default function DownloadButton({getFiles, file}) {
         .then(response => {
             var a = document.createElement('a');
             a.href = response.message;
-            a.download = file.name
+            a.download = extract_filename(file.name)
+            a.download = "export.txt"
             document.body.appendChild(a);
             a.click();    
             a.remove();  
