@@ -7,3 +7,20 @@
     color: black;
     font-family: 'Poppins', sans-serif;
 }
+
+.upload-name-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.upload-name {
+    width: 100%;
+}
+
+.cancel-button {
+    width: 100%;
+    display: flex;
+    justify-content: end;
+    position: relative;
+}
