@@ -4,17 +4,25 @@
 }
 
 .file-view-container{
-    width: 98.5%;
+    width: 97.5%;
     height: auto;
     background: white;
     border-radius: 15px;
     color: black;
 }
 
-
-
 .line {
     height: 1px;
     width: 90vw;
     background: grey
+}
+
+.menu-vertical-container {
+    cursor: pointer;
+}
+
+.menu-vertical {
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
 }

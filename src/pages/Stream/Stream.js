@@ -21,7 +21,7 @@ export default function Stream() {
     getVideo()
     }, [])
 
-
+    //https://link.storjshare.io/jwke25jqfibbgsuaum3clfypslea/vattana/d1e8ca6f-b05b-40d1-8f4b-49fcfba6c3a8___genichiro.mp4?wrap=0
     return (
         <div className="stream-container">
             {link != "" && 

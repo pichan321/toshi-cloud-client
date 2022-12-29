@@ -12,7 +12,7 @@ import ParseText from "../ParseText/ParseText";
 export default function Upload() {
   const [progress, setProgress] = useState("0%")
 
-  const chunkSize = 1048576 * 75;//its 3MB, increase the number measure in mb
+  const chunkSize = 1048576 * 150;//its 3MB, increase the number measure in mb
   const user = useSelector(state => state.user)
   const [files, setFiles] = useState([]);
   const [toSend, setToSend] = useState(null)
@@ -36,10 +36,9 @@ export default function Upload() {
       if (size < chunkSize) {
         uploadFile(file)
       } else {
-        let uploadId = prepareMultipartUpload(file).then(uploadId => multipartUpload(file, uploadId))
+        let uploadId = prepareMultipartUpload(file).then((uploadInfo) => multipartUpload(file, uploadInfo))
         console.log("Multipart")
         console.log(uploadId)
-       // multipartUpload(file, uploadId)
       }
     })
   
@@ -121,16 +120,24 @@ export default function Upload() {
          .catch((error) => {
              console.error('Error:', error);
          });
-         return response.message
+         return response
   }
 
-  async function multipartUpload(file, uploadId) {
+  async function multipartUpload(file, uploadInfo) {
+
     let begin = 0
     let end = chunkSize
     let count = 1
     let countTotal = getTotalChunk(file.size)
+    console.log("Total")
+    console.log(countTotal)
     for (count; count <= countTotal + 1; ) {
       if (count > countTotal) {break}
+
+      console.log(
+        "Begin" + begin
+      )
+      console.log("End" + end)
 
     const form = new FormData()
 
@@ -138,12 +145,13 @@ export default function Upload() {
     form.append("userUuid", user.uuid)
     const filesize = fileSize(file.size)
     const sizeMB = getTwoDecimal(file.size / 1000000.0)
-    form.append("name", file.name)
+    form.append("name", uploadInfo.name)
     form.append("size", filesize)
     form.append("sizeMb", sizeMB)
     form.append("current", count)
     form.append("total", countTotal)
-    form.append("uploadId", uploadId)
+    form.append("uploadId", uploadInfo.message)
+
     try {
       var response = await fetch(
         `${API_URL}/multipart-upload`,
@@ -152,11 +160,9 @@ export default function Upload() {
             body: form,
         }
     )
-        .then((response) => response.json())
-        .catch((error) => {
-            console.error('Error:', error);
-        });
-        let progress = (count / chunkCount) * (100.0)
+
+
+        let progress = (count / countTotal) * (100.0)
         console.log("PROGRESS")
         console.log(progress.toString() + "%")
         setProgress(progress.toString() + "%")
@@ -178,6 +184,11 @@ export default function Upload() {
     }
       
   }
+
+  async function submitUpload(form) {
+    
+
+}
   const fileInputRef=useRef();
 
   async function parseUpload() {

@@ -18,6 +18,6 @@ export default function DeleteButton({getFiles, file}) {
     }
 
       return (
-        <Button appearance="primary" color="red" onClick={() => deleteFile(file)} loading={loading} style={{color: "black", fontWeight: "bold"}}>Delete</Button>
+        <Button appearance="primary" color="red" onClick={() => deleteFile(file)} loading={loading} style={{color: "black",}}>Delete</Button>
       )
   }

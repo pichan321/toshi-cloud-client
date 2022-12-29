@@ -1,7 +1,11 @@
 .main {
     font-family: 'Poppins', sans-serif;
     height: auto;
-    overflow-x: hidden;
+    position: absolute;
+    left: 0;
+    top: 0;
+    overflow: hidden;
+    width: 100%;
 }
 
 .logout-button-container {
@@ -14,6 +18,9 @@
 }
 
 .logout-button {
+    position: absolute;
+    top: 0.5em;
+    right: 1em;
     width: 100%;
     height: 100%;
 }
