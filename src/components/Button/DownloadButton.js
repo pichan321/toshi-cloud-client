@@ -30,5 +30,5 @@ export default function DownloadButton({getFiles, file}) {
       setLoading(false)
     }
     
-      return (<Button appearance="primary" color="green" onClick={() => downloadFile(file)} loading={loading} style={{color: "black", fontWeight: "bold"}}>Download</Button>)
+      return (<Button appearance="primary" color="green" onClick={() => downloadFile(file)} loading={loading} style={{color: "black",}}>Download</Button>)
   }

@@ -8,6 +8,8 @@ import { stringToArray } from "ag-grid-community";
 import { API_URL, CLIENT_URL } from "../../utils/API";
 import { extract_filename } from "../../utils/file";
 import { get } from "../../utils/API";
+import MenuVertical from "../MenuVertical/MenuVertical";
+
 
 export default function FileView({ files, getFiles }) {
   const navigate = useNavigate();
@@ -61,7 +63,7 @@ export default function FileView({ files, getFiles }) {
                         <div className="col-2 d-none d-md-block">
                           <p>{file.uploadedDate}</p>
                         </div>
-                        <div className="col-1">
+
                         {/** {String(file.name).includes(".mp4") && (
                             <Button
                               file={file}
@@ -72,25 +74,39 @@ export default function FileView({ files, getFiles }) {
                             >
                               View
                             </Button>
-                          )} */}
+                          )} 
                           
-                          {String(file.name).includes(".txt") && (
+                           {String(file.name).includes(".txt") && (
                             <Button
                               file={file}
                               getFiles={getFiles}
                               appearance="primary"
                               onClick={() => getFileContent(file)}
-                              style={{ color: "black", fontWeight: "bold" }}
+                              style={{ color: "black",}}
                             >
                               View
                             </Button>
-                          )}
-                        </div>
-                        <div className="col-1">
+                                          )}
+                          
+                          */}
+                      
+                         
+          
+        
+                        {/**
+                            <div className="col-1">
                           <DownloadButton file={file} getFiles={getFiles} />
                         </div>
                         <div className="col-1">
                           <DeleteButton file={file} getFiles={getFiles} />
+                        </div>
+                         */}
+                        
+                        <div className="col-6 col-md-4">
+                          <div className="menu-vertical-col" style={{display: "flex", justifyContent: "end"}}>
+                           <MenuVertical file={file} getFiles={getFiles}/>    
+                          </div>
+                     
                         </div>
                       </div>
                       <div className="line"></div>

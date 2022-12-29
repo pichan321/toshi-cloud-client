@@ -111,14 +111,11 @@ export default function Main() {
                 <img src="https://cdn-icons-png.flaticon.com/512/8914/8914308.png" onClick={() => logout()} className="logout-button"/>
 
         </div>
-        <div className=''>
-          <div className='row'>
 
-          </div>
           <div className='row'>
           <Upload user={user}/>
           </div>
-        </div>
+
    
         <div className='container-fluid'>
           <div className='row'>
