@@ -35,6 +35,7 @@ export default function Main() {
     const dispatch = useDispatch()
     const gridRef = useState(null)
     const [files, setFiles] = useState([])
+    const [showHidden, setShowHidden] = useState(false)
 
 
     // const [columnDefs] = useState([
@@ -120,7 +121,7 @@ export default function Main() {
           <div className='row'>
           <Upload user={user}/>
           <SearchBar/>
-          <Checkbox style={{color: "white"}}>Show Hidden Files</Checkbox>
+          <Checkbox style={{color: "white"}} checked={showHidden} onChange={(e, checked) => setShowHidden(checked)}>Show Hidden Files</Checkbox>
 
           </div>
 
@@ -134,7 +135,7 @@ export default function Main() {
               <div className='container-fluid'>
                 <div className='row'>
                   <div className='col-12'>
-                    <FileView files={files} getFiles={getFiles}/>
+                    <FileView files={files} getFiles={getFiles} showHidden={showHidden}/>
                   </div>
                 
                 </div>

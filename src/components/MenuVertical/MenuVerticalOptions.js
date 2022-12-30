@@ -64,6 +64,26 @@ export default function MenuVerticalOptions({file, getFiles, setShowOptions, sho
         // setLoading(false)
       }
 
+      async function hide(file) {
+        try {
+            var response = await get(`${API_URL}/hide/${file.uuid}`)
+            setShowOptions(false)
+            getFiles()
+          } catch {
+            return
+          }
+      }
+
+      async function unhide(file) {
+        try {
+            var response = await get(`${API_URL}/unhide/${file.uuid}`)
+            setShowOptions(false)
+            getFiles()
+          } catch {
+            return
+          }
+      }
+
     return (
         <div className="menu-vertical-options-container p-3">
             <div className="container-fluid" style={{width: "100%"}}>
@@ -79,21 +99,27 @@ export default function MenuVerticalOptions({file, getFiles, setShowOptions, sho
                         </div>
                         
                     </div>
+                  
+                    {file.hidden ?    
                     <div className="col-12 p-2 option-item">
-                            <div style={{display: "flex", alignItems: "center"}} onClick={() => null}>
-                            <p><img src="https://img.icons8.com/nolan/512/hide.png" alt="Hide" width={30} height={30}/> Hide</p>
-                        </div>
-                    </div>
-                    <div className="col-12 p-2 option-item">
-                            <div style={{display: "flex", alignItems: "center"}} onClick={() => null}>
+                        <div style={{display: "flex", alignItems: "center"}} onClick={() => unhide(file)}>
                             <p><img src="https://img.icons8.com/external-soft-fill-juicy-fish/512/external-woke-emotional-intelligence-soft-fill-soft-fill-juicy-fish.png" alt="Hide" width={30} height={30}/> Unhide</p>
                         </div>
                     </div>
+                    :
                     <div className="col-12 p-2 option-item">
-                            <div style={{display: "flex", alignItems: "center"}} onClick={() => deleteFile(file)}>
+                            <div style={{display: "flex", alignItems: "center"}} onClick={() => hide(file)}>
+                            <p><img src="https://img.icons8.com/nolan/512/hide.png" alt="Hide" width={30} height={30}/> Hide</p>
+                        </div>
+                    </div>
+                    
+                    }
+                    <div className="col-12 p-2 option-item">
+                        <div style={{display: "flex", alignItems: "center"}} onClick={() => deleteFile(file)}>
                             <p><img src="https://img.icons8.com/external-soft-fill-juicy-fish/512/external-delete-folders-soft-fill-soft-fill-juicy-fish.png" alt="Delete" width={30} height={30}/> Delete</p>
                         </div>
                     </div>
+                   
                 </div>
      
             </div>

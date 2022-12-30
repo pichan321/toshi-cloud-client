@@ -11,7 +11,7 @@ import { get } from "../../utils/API";
 import MenuVertical from "../MenuVertical/MenuVertical";
 
 
-export default function FileView({ files, getFiles }) {
+export default function FileView({ files, getFiles, showHidden }) {
   const navigate = useNavigate();
 
   async function viewFile(file) {
@@ -50,7 +50,10 @@ export default function FileView({ files, getFiles }) {
             </div>
             {files &&
               files.map((file) => {
-                if (file.status === "100.0") {
+   
+                if (file.status === "100.0" && file.hidden === false) {
+
+                  {console.log("Here")}
                   return (
                     <div>
                       <div className="row align-items-center m-3">
@@ -63,8 +66,52 @@ export default function FileView({ files, getFiles }) {
                         <div className="col-2 d-none d-md-block">
                           <p>{file.uploadedDate}</p>
                         </div>
+                        <div className="col-6 col-md-4">
+                          <div className="menu-vertical-col" style={{display: "flex", justifyContent: "end"}}>
+                           <MenuVertical file={file} getFiles={getFiles}/>    
+                          </div>
+                     
+                        </div>
+                      </div>
+                      <div className="line"></div>
+                    </div>
+                  );
+                } else if (showHidden) {
+                  {console.log("Exception")}
+                  return (
+           
+                    <div>
+                      <div className="row align-items-center m-3">
+                        <div className="col-4">
+                          <p><img src="https://img.icons8.com/nolan/512/hide.png" alt="Hidden" width={30} height={30}/> {extract_filename(file.name)}</p>
+                        </div>
+                        <div className="col-2">
+                          <p>{file.size}</p>
+                        </div>
+                        <div className="col-2 d-none d-md-block">
+                          <p>{file.uploadedDate}</p>
+                        </div>
+                        <div className="col-6 col-md-4">
+                          <div className="menu-vertical-col" style={{display: "flex", justifyContent: "end"}}>
+                           <MenuVertical file={file} getFiles={getFiles}/>    
+                          </div>
+                     
+                        </div>
+                      </div>
+                      <div className="line"></div>
+                    </div>
+                  );
+                }
+              })}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
-                        {/** {String(file.name).includes(".mp4") && (
+/**
+         {/** {String(file.name).includes(".mp4") && (
                             <Button
                               file={file}
                               getFiles={getFiles}
@@ -88,36 +135,17 @@ export default function FileView({ files, getFiles }) {
                             </Button>
                                           )}
                           
-                          */}
+                          */
                       
                          
           
         
-                        {/**
+                        /**
                             <div className="col-1">
                           <DownloadButton file={file} getFiles={getFiles} />
                         </div>
                         <div className="col-1">
                           <DeleteButton file={file} getFiles={getFiles} />
                         </div>
-                         */}
+                         */
                         
-                        <div className="col-6 col-md-4">
-                          <div className="menu-vertical-col" style={{display: "flex", justifyContent: "end"}}>
-                           <MenuVertical file={file} getFiles={getFiles}/>    
-                          </div>
-                     
-                        </div>
-                      </div>
-                      <div className="line"></div>
-                    </div>
-                  );
-                } else {
-                }
-              })}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
