@@ -14,9 +14,10 @@ export default function MenuVerticalOptions({file, getFiles, setShowOptions, sho
             viewFile(file)
         }
 
-        if (type === "txt") {
-            getFileContent(file)
-        }
+        var supportedFileTypes = ["txt", "jpg", "png"]
+        if (supportedFileTypes.includes(type)) {getFileContent(file)}
+
+
     }
 
     async function viewFile(file) {
