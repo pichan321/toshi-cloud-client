@@ -80,6 +80,16 @@ export default function MenuVerticalOptions({file, getFiles, setShowOptions, sho
                         
                     </div>
                     <div className="col-12 p-2 option-item">
+                            <div style={{display: "flex", alignItems: "center"}} onClick={() => null}>
+                            <p><img src="https://img.icons8.com/nolan/512/hide.png" alt="Hide" width={30} height={30}/> Hide</p>
+                        </div>
+                    </div>
+                    <div className="col-12 p-2 option-item">
+                            <div style={{display: "flex", alignItems: "center"}} onClick={() => null}>
+                            <p><img src="https://img.icons8.com/external-soft-fill-juicy-fish/512/external-woke-emotional-intelligence-soft-fill-soft-fill-juicy-fish.png" alt="Hide" width={30} height={30}/> Unhide</p>
+                        </div>
+                    </div>
+                    <div className="col-12 p-2 option-item">
                             <div style={{display: "flex", alignItems: "center"}} onClick={() => deleteFile(file)}>
                             <p><img src="https://img.icons8.com/external-soft-fill-juicy-fish/512/external-delete-folders-soft-fill-soft-fill-juicy-fish.png" alt="Delete" width={30} height={30}/> Delete</p>
                         </div>

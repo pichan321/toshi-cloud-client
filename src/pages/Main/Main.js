@@ -24,6 +24,11 @@ import './Main.css'
 import ProgressBar from '../../components/ProgressBar/ProgressBar';
 import FileView from '../../components/FileView/FileView';
 import { useNavigate } from "react-router-dom";
+import { Checkbox } from 'rsuite';
+import { Input, InputGroup, Grid, Row, Col } from 'rsuite';
+import SearchIcon from '@rsuite/icons/Search';
+import SearchBar from '../../components/SearchBar/SearchBar';
+
 
 export default function Main() {
     const user = useSelector(state => state.user)
@@ -114,6 +119,9 @@ export default function Main() {
 
           <div className='row'>
           <Upload user={user}/>
+          <SearchBar/>
+          <Checkbox style={{color: "white"}}>Show Hidden Files</Checkbox>
+
           </div>
 
    
