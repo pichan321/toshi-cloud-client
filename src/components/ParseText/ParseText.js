@@ -32,6 +32,7 @@ export default function ParseText({close}) {
                 </div>
               
                 <Input 
+                    spellcheck={false}
                     as="textarea"  
                     placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." 
                     style={{borderColor: "black", width: "100%", height: "50vh"}} 

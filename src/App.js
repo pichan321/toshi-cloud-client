@@ -131,7 +131,7 @@ function App() {
 
   //<div className='app'>{user.isLoggedIn ? <Main/> : <Login getFiles={getFiles}/>}</div>
   return (
-    <div className="app">
+    <div className="">
       <Routes>
         <Route
           path="/"
