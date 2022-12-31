@@ -14,13 +14,12 @@ export default function Content() {
                 {
 
                     var contentType = blob.type
-
                     if (contentType === "text/plain") {
                         var text = await blob.text()
                         setContent(text)
                         setType(contentType)
                     }
-                    if (contentType === "image/jpg") {
+                    if (contentType === "image/jpg" || contentType === "image/gif") {
                         var objectURL = URL.createObjectURL(blob);
                         setContent(objectURL)
                         setType(contentType)

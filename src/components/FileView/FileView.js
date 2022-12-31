@@ -102,7 +102,7 @@ export default function FileView({ files, getFiles, showHidden, search}) {
               }):
               
               files.map((file) => {
-                if (file.status === "100.0" && file.hidden === false && file.name.includes(search)) {
+                if (file.status === "100.0" && file.hidden === false && file.name.toLowerCase().includes(search.toLowerCase())) {
                   return (
                     <div>
                       <div className="row align-items-center m-3">
@@ -125,7 +125,7 @@ export default function FileView({ files, getFiles, showHidden, search}) {
                       <div className="line"></div>
                     </div>
                   );
-                } else if (showHidden  && file.name.includes(search)) {
+                } else if (showHidden  && file.name.toLowerCase().includes(search.toLowerCase())) {
  
                   return (
            
