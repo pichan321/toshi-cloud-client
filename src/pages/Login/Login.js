@@ -7,7 +7,8 @@ import { API_URL, get, post } from '../../utils/API';
 import {Form} from 'react-bootstrap';
 import Button from 'rsuite/Button';
 import { ToastContainer, toast } from 'react-toastify';
-  import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.css';
+import TextField from '@mui/material/TextField';
 
 export default function Login({getFiles}) {
     const user = useSelector(state => state.user)
@@ -111,19 +112,17 @@ export default function Login({getFiles}) {
                         </div>
                         <Form>
                             <Form.Group className="mb-3">
-                              <Form.Label>Username</Form.Label>
-                              <Form.Control type="email" placeholder="Enter username" onChange={(e) => dispatch(userActions.updateUsername(e.target.value))} value={user.username}/>
+                                <TextField id="standard-basic" label="Username" variant="standard" type="text" onChange={(e) => dispatch(userActions.updateUsername(e.target.value))} value={user.username} style={{width: "100%"}}/>
                             </Form.Group>
 
                             <Form.Group className="mb-3" controlId="formBasicPassword">
-                              <Form.Label>Password</Form.Label>
-                              <Form.Control type="password" placeholder="Password" onChange={(e) => dispatch(userActions.updatePassword(e.target.value))} value={user.password}/>
+                                <TextField id="standard-basic" label="Password" variant="standard" type="password" onChange={(e) => dispatch(userActions.updatePassword(e.target.value))} value={user.password} style={{width: "100%"}}/>
                             </Form.Group>
                             
                             <div className='text-center'>
                                 <Button appearance="primary" className='mb-3' onClick={() => login()} loading={loading}>Login</Button>
                                 <br></br>
-                            <div>
+                            <div className='m-3'>
                                 <p>No account?</p>
                                 <div className='signup' onClick={() => setRegister(true)}>Sign Up</div>
                             </div>
@@ -146,22 +145,18 @@ export default function Login({getFiles}) {
                         </div>
                         <Form>
                             <Form.Group className="mb-3" controlId="formBasicEmail">
-                              <Form.Label>Email Address</Form.Label>
-                              <Form.Control type="email" placeholder="Enter email" onChange={(e) => setRegisterInfo({...registerInfo, email : e.target.value})} value={registerInfo.email}/>
+                                <TextField id="standard-basic" label="Email Address" variant="standard" type="email" onChange={(e) => setRegisterInfo({...registerInfo, email : e.target.value})} value={registerInfo.email} style={{width: "100%"}}/>
                             </Form.Group>
 
                             <Form.Group className="mb-3">
-                              <Form.Label>Username</Form.Label>
-                              <Form.Control type="email" placeholder="Enter username" onChange={(e) => setRegisterInfo({...registerInfo, username : e.target.value})} value={registerInfo.username}/>
+                                <TextField id="standard-basic" label="Username" variant="standard" type="text" onChange={(e) => setRegisterInfo({...registerInfo, username : e.target.value})} value={registerInfo.username} style={{width: "100%"}}/>
                             </Form.Group>
 
                             <Form.Group className="mb-3" controlId="formBasicPassword">
-                              <Form.Label>Password</Form.Label>
-                              <Form.Control type="password" placeholder="Password" onChange={(e) => setRegisterInfo({...registerInfo, password : e.target.value})} value={registerInfo.password}/>
+                                <TextField id="standard-basic" label="Password" variant="standard" type="password" onChange={(e) => setRegisterInfo({...registerInfo, password : e.target.value})} value={registerInfo.password} style={{width: "100%"}}/>
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="formBasicPassword">
-                              <Form.Label>Confirm Password</Form.Label>
-                              <Form.Control type="password" placeholder="Password" onChange={(e) => setRegisterInfo({...registerInfo, confirmPassword : e.target.value})} value={registerInfo.confirmPassword}/>
+                                <TextField id="standard-basic" label="Confirm Password" variant="standard" type="password" onChange={(e) => setRegisterInfo({...registerInfo, confirmPassword : e.target.value})} value={registerInfo.confirmPassword} style={{width: "100%"}}/>
                             </Form.Group>
                             
                             <div className='text-center'>

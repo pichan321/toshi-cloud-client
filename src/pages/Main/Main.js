@@ -36,6 +36,7 @@ export default function Main() {
     const gridRef = useState(null)
     const [files, setFiles] = useState([])
     const [showHidden, setShowHidden] = useState(false)
+    const [search, setSearch] = useState("")
 
 
     // const [columnDefs] = useState([
@@ -110,6 +111,10 @@ export default function Main() {
       getFiles()
     }, [])
 
+    useEffect(() => {
+      console.log(search)
+    })
+
     return (
         <div className="main" style={{background: "black"}}>
         <div className='logout-button-container'>
@@ -118,13 +123,18 @@ export default function Main() {
 
         </div>
 
-          <div className='row'>
-          <Upload user={user}/>
-          <SearchBar/>
-          <Checkbox style={{color: "white"}} checked={showHidden} onChange={(e, checked) => setShowHidden(checked)}>Show Hidden Files</Checkbox>
+          <div className='row align-items-center'>
+            <div className='col-12 col-md-3'>
+              <Upload user={user}/>
+            </div>
+            <div className='col-12 col-md-6 p-3'>
+              <SearchBar setSearch={setSearch}/>
+            </div>
+
+  
 
           </div>
-
+          <Checkbox style={{color: "white"}} checked={showHidden} onChange={(e, checked) => setShowHidden(checked)}>Show Hidden Files</Checkbox>
    
         <div className='container-fluid'>
           <div className='row'>
@@ -135,7 +145,7 @@ export default function Main() {
               <div className='container-fluid'>
                 <div className='row'>
                   <div className='col-12'>
-                    <FileView files={files} getFiles={getFiles} showHidden={showHidden}/>
+                    <FileView files={files} getFiles={getFiles} showHidden={showHidden} search={search}/>
                   </div>
                 
                 </div>
