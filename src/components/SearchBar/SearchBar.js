@@ -2,11 +2,14 @@ import React from "react";
 import { Input, InputGroup, Grid, Row, Col } from 'rsuite';
 import SearchIcon from '@rsuite/icons/Search';
 
-export default function SearchBar() {
+export default function SearchBar(props) {
+
+
+
   return (
-    <div>
+    <div style={{width: "100%"}}>
       <InputGroup inside>
-        <Input placeholder={""} />
+        <Input placeholder={"Search file"} onChange={(e) => props.setSearch(e)}/>
         <InputGroup.Button>
           <SearchIcon />
         </InputGroup.Button>
