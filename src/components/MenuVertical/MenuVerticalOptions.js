@@ -13,8 +13,8 @@ export default function MenuVerticalOptions({file, getFiles, setShowOptions, sho
         if (type === "mp4") {
             viewFile(file)
         }
-
-        var supportedFileTypes = ["txt", "jpg", "png"]
+ 
+        var supportedFileTypes = ["txt", "jpg", "png", "gif"]
         if (supportedFileTypes.includes(type)) {getFileContent(file)}
 
 

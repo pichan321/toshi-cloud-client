@@ -19,6 +19,7 @@ export default function ParseText({close}) {
             setLoading(false)
         }
         setLoading(false)
+        close(false)
       }
 
     return (

@@ -111,10 +111,6 @@ export default function Main() {
       getFiles()
     }, [])
 
-    useEffect(() => {
-      console.log(search)
-    })
-
     return (
         <div className="main" style={{background: "black"}}>
         <div className='logout-button-container'>
