@@ -16,7 +16,7 @@ export default function UploadView({ files, getFiles}) {
       }
 
     return (
-    <div>
+    <div className="upload-view">
       {files.map((file) => {
         if (file.status !== "100.0") {
           return (

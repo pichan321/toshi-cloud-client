@@ -53,10 +53,20 @@ export default function FileView({ files, getFiles, showHidden, search}) {
 
   return (
     <div>
+
+
+
       <div className="container-fluid" style={{height: "auto", color: "black", fontFamily: "'Poppins', sans-serif;", width: `${width}vw`}}>
 
-<div className="container-fluid file-view pt-5 pb-5">
+        <div className="row">
+      
+          </div>
 
+
+<div className="container-fluid file-view pt-5 pb-5">
+<div className="col-12">
+            <UploadView files={files} getFiles={getFiles} />
+          </div>
 
     <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
 {search == "" ?

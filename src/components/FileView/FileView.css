@@ -29,3 +29,8 @@
     width: 30px;
     height: 30px;
 }
+
+.upload-view {
+    height: 100%;
+    overflow-y: scroll;
+}

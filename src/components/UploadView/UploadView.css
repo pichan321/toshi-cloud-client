@@ -8,6 +8,10 @@
     font-family: 'Poppins', sans-serif;
 }
 
+.upload-view {
+    overflow-y: scroll;
+}
+
 .upload-name-container {
     display: flex;
     align-items: center;
