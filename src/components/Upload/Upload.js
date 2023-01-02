@@ -12,7 +12,7 @@ import ParseText from "../ParseText/ParseText";
 export default function Upload() {
   const [progress, setProgress] = useState("0%")
 
-  const chunkSize = 1048576 * 150;//its 3MB, increase the number measure in mb
+  const chunkSize = 1048576 * 50;//its 3MB, increase the number measure in mb
   const user = useSelector(state => state.user)
   const [files, setFiles] = useState([]);
   const [toSend, setToSend] = useState(null)
