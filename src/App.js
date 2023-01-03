@@ -82,6 +82,8 @@ function App() {
   ]);
 
   async function getFiles() {
+    if (user.uuid === "") {return}
+
     let response = await get(`${API_URL}/get-files/${user.uuid}`);
     setFiles(response);
   }

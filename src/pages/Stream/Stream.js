@@ -11,7 +11,7 @@ export default function Stream() {
     
     const getVideo = async () => {
         try {
-            let response = await get(`${API_URL}/stream/${fileUuid}`)
+            let response = await get(`${API_URL}/file/stream/${fileUuid}`)
             setLink(response.message)
         } catch {
             return

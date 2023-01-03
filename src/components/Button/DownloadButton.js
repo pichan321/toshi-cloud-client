@@ -10,7 +10,7 @@ export default function DownloadButton({getFiles, file}) {
     async function downloadFile(file) {
        setLoading(true)
        try {
-        await fetch(`${API_URL}/download/${file.uuid}`)
+        await fetch(`${API_URL}/file/download/${file.uuid}`)
         .then(response => response.json())
         .then(response => {
             var a = document.createElement('a');

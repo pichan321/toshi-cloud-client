@@ -9,7 +9,7 @@ export default function DeleteButton({getFiles, file}) {
     async function deleteFile(file) {
       setLoading(true)
       try {
-        var response = await get(`${API_URL}/delete/${file.uuid}`)
+        var response = await get(`${API_URL}/file/delete/${file.uuid}`)
         getFiles()
       } catch {
         return

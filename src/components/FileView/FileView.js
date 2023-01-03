@@ -56,7 +56,7 @@ export default function FileView({ files, getFiles, showHidden, search}) {
 
 
 
-      <div className="container-fluid" style={{height: "auto", color: "black", fontFamily: "'Poppins', sans-serif;", width: `${width}vw`}}>
+      <div className="container-fluid" style={{height: "auto", color: "black", width: `${width}vw`}}>
 
         <div className="row">
       
@@ -76,13 +76,11 @@ export default function FileView({ files, getFiles, showHidden, search}) {
                     (<>
             <div className="row">
               <div className="col-10">
-              <ListItem style={{ width: '100%', height: "auto"}}>
+              <ListItem style={{ width: '100%', height: "auto"}} key={file.uuid}>
      
      <ListItemAvatar>
-       <Avatar>
-         <ImageIcon />
-       </Avatar>
-
+       <img src="https://img.icons8.com/fluency/512/video.png" alt="" width={40} height={40}/>
+      
      </ListItemAvatar>
      <ListItemText 
      primary={<div style={{fontWeight: "bold"}}>{extract_filename(file.name)}</div>} 
@@ -120,12 +118,12 @@ export default function FileView({ files, getFiles, showHidden, search}) {
                     (<>
             <div className="row">
               <div className="col-10">
-              <ListItem style={{ width: '100%', height: "auto"}}>
+              <ListItem style={{ width: '100%', height: "auto"}} key={file.uuid}>
      
      <ListItemAvatar>
-       <Avatar>
-         <ImageIcon />
-       </Avatar>
+
+        <img src="https://img.icons8.com/dusk/512/image-file.png" alt="" width={40} height={40}/>
+
 
      </ListItemAvatar>
      <ListItemText 
@@ -257,7 +255,7 @@ export default function FileView({ files, getFiles, showHidden, search}) {
      </div>
      </div>
     
-      <div className="container-fluid" style={{height: "auto", color: "black", fontFamily: "'Poppins', sans-serif;", width: `${width}vw`}}>
+      <div className="container-fluid" style={{height: "auto", color: "black", width: `${width}vw`}}>
 
       <div className="container-fluid file-view pt-5 pb-5">
    

@@ -32,7 +32,22 @@ export default function Login({getFiles}) {
 
         try {
             let response = await post(`${API_URL}/register-account`, registerInfo)
+            if (response.code === 400 || response.code === 404) {
+                toast.error("Unable to complete registration!")
+                return 
+            }
+            toast.success("Account Registered!")
+            setTimeout(() => {
+                login({username: registerInfo.username, password: registerInfo.password})
+            }, 2000)
+            setRegisterInfo(  {
+                email: "",
+                username: "",
+                password: "",
+                confirmPassword: ""
+             })
         } catch {
+            toast.error("Unable to complete registration!")
             return
         }
         
@@ -56,9 +71,8 @@ export default function Login({getFiles}) {
         tokenLogin()
     }, [])
 
-    async function login() {
+    async function login(user) {
         setLoading(true)
-        console.log(user)
         try {
             let response = await post(`${API_URL}/login`, user)
             if (response.code === 404 || response.code === 500) {
@@ -70,6 +84,7 @@ export default function Login({getFiles}) {
             setTimeout(() => {
                 dispatch(userActions.updateIsLoggedIn(true))
                 dispatch(userActions.updateUuid(response.uuid))
+                dispatch(userActions.updatePassword(""))
                 localStorage.setItem("@toshi-cloud-token", response.token)
                 dispatch(userActions.updateToken(response.token))
             }, 2000)
@@ -120,7 +135,7 @@ export default function Login({getFiles}) {
                             </Form.Group>
                             
                             <div className='text-center'>
-                                <Button appearance="primary" className='mb-3' onClick={() => login()} loading={loading}>Login</Button>
+                                <Button appearance="primary" className='mb-3' onClick={() => login(user)} loading={loading}>Login</Button>
                                 <br></br>
                             <div className='m-3'>
                                 <p>No account?</p>

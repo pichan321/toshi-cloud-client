@@ -30,7 +30,7 @@ export default function MenuVerticalOptions({file, getFiles, setShowOptions, sho
 
     async function downloadFile(file) {
         try {
-         await fetch(`${API_URL}/download/${file.uuid}`)
+         await fetch(`${API_URL}/file/download/${file.uuid}`)
          .then(response => response.json())
          .then(response => {
              var a = document.createElement('a');
@@ -55,7 +55,7 @@ export default function MenuVerticalOptions({file, getFiles, setShowOptions, sho
      async function deleteFile(file) {
         // setLoading(true)
         try {
-          var response = await get(`${API_URL}/delete/${file.uuid}`)
+          var response = await get(`${API_URL}/file/delete/${file.uuid}`)
           setShowOptions(false)
           getFiles()
         } catch {
@@ -66,7 +66,7 @@ export default function MenuVerticalOptions({file, getFiles, setShowOptions, sho
 
       async function hide(file) {
         try {
-            var response = await get(`${API_URL}/hide/${file.uuid}`)
+            var response = await get(`${API_URL}/file/hide/${file.uuid}`)
             setShowOptions(false)
             getFiles()
           } catch {
@@ -76,7 +76,7 @@ export default function MenuVerticalOptions({file, getFiles, setShowOptions, sho
 
       async function unhide(file) {
         try {
-            var response = await get(`${API_URL}/unhide/${file.uuid}`)
+            var response = await get(`${API_URL}/file/unhide/${file.uuid}`)
             setShowOptions(false)
             getFiles()
           } catch {

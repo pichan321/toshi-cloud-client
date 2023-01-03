@@ -10,7 +10,7 @@ export default function Content() {
     useEffect(() => {
         const getContent = async () => {
             try {
-                let response = await fetch(`${API_URL}/content/${fileUuid}`).then(response => response.blob()).then(async (blob) =>
+                let response = await fetch(`${API_URL}/file/content/${fileUuid}`).then(response => response.blob()).then(async (blob) =>
                 {
 
                     var contentType = blob.type
