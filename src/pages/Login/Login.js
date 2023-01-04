@@ -8,10 +8,12 @@ import {Form} from 'react-bootstrap';
 import Button from 'rsuite/Button';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router';
 import TextField from '@mui/material/TextField';
 
 export default function Login({getFiles}) {
     const user = useSelector(state => state.user)
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(false)
     const [register, setRegister] = useState(false)
     const [registerInfo, setRegisterInfo] = useState(
@@ -63,6 +65,7 @@ export default function Login({getFiles}) {
             dispatch(userActions.updateUsername(response.username))
             dispatch(userActions.updateIsLoggedIn(true))
        } catch {
+            navigate("/")
             return
         }
     }
@@ -90,6 +93,7 @@ export default function Login({getFiles}) {
             }, 2000)
         } catch {
             setLoading(false)
+            navigate("/")
             return
         }
         setLoading(false)

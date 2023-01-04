@@ -19,6 +19,7 @@ import WorkIcon from '@mui/icons-material/Work';
 import BeachAccessIcon from '@mui/icons-material/BeachAccess';
 import Divider from '@mui/material/Divider';
 import { useEffect, useState } from "react";
+import FileAvatar from "./FileAvatar";
 
 
 export default function FileView({ files, getFiles, showHidden, search}) {
@@ -68,7 +69,7 @@ export default function FileView({ files, getFiles, showHidden, search}) {
             <UploadView files={files} getFiles={getFiles} />
           </div>
 
-    <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+    <List sx={{ width: '100%', bgcolor: 'background.paper' }} style={{borderRadius: 15}}>
 {search == "" ?
               files.map((file) => {
                 if (file.status === "100.0" && file.hidden === false) {
@@ -79,8 +80,7 @@ export default function FileView({ files, getFiles, showHidden, search}) {
               <ListItem style={{ width: '100%', height: "auto"}} key={file.uuid}>
      
      <ListItemAvatar>
-       <img src="https://img.icons8.com/fluency/512/video.png" alt="" width={40} height={40}/>
-      
+      <FileAvatar type={extract_filename(file.name).split(".")[extract_filename(file.name).split(".").length - 1]}/>
      </ListItemAvatar>
      <ListItemText 
      primary={<div style={{fontWeight: "bold"}}>{extract_filename(file.name)}</div>} 
@@ -122,7 +122,7 @@ export default function FileView({ files, getFiles, showHidden, search}) {
      
      <ListItemAvatar>
 
-        <img src="https://img.icons8.com/dusk/512/image-file.png" alt="" width={40} height={40}/>
+      <FileAvatar type={extract_filename(file.name).split(".")[extract_filename(file.name).split(".").length - 1]}/>
 
 
      </ListItemAvatar>
@@ -170,7 +170,7 @@ export default function FileView({ files, getFiles, showHidden, search}) {
      
      <ListItemAvatar>
        <Avatar>
-         <ImageIcon />
+        <FileAvatar type={extract_filename(file.name).split(".")[extract_filename(file.name).split(".").length - 1]}/>
        </Avatar>
 
      </ListItemAvatar>
@@ -214,7 +214,7 @@ export default function FileView({ files, getFiles, showHidden, search}) {
      
      <ListItemAvatar>
        <Avatar>
-         <ImageIcon />
+        <FileAvatar type={extract_filename(file.name).split(".")[extract_filename(file.name).split(".").length - 1]}/>
        </Avatar>
 
      </ListItemAvatar>
@@ -269,7 +269,7 @@ export default function FileView({ files, getFiles, showHidden, search}) {
      
      <ListItemAvatar>
        <Avatar>
-         <ImageIcon />
+        <FileAvatar type={extract_filename(file.name).split(".")[extract_filename(file.name).split(".").length - 1]}/>
        </Avatar>
 
      </ListItemAvatar>
