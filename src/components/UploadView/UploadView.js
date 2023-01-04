@@ -8,7 +8,7 @@ export default function UploadView({ files, getFiles}) {
 
     async function deleteFile(file) {
         try {
-          var response = await get(`${API_URL}/delete/${file.uuid}`)
+          var response = await get(`${API_URL}/file/delete/${file.uuid}`)
         } catch {
           return
         }
