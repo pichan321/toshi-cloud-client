@@ -5,7 +5,7 @@ export default function FileAvatar({type}) {
     const video = ["mp4"]
     const csv = ["csv"]
     const text = ["txt", "json"]
-    const excel = ["xlsx"]
+    const excel = ["xlsx", "xls"]
 
     return (
         <div>

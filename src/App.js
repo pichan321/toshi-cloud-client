@@ -6,12 +6,6 @@ import "rsuite/styles/index.less";
 import "rsuite/dist/rsuite.min.css";
 import "./App.css";
 import { get } from "./utils/API";
-import { AgGridReact } from "ag-grid-react";
-import Uppy from "@uppy/core";
-import DragDrop from "./components/Upload/Upload";
-import ProgressBar from "@uppy/progress-bar";
-import Tus from "@uppy/tus";
-import Button from "rsuite/Button";
 import "@uppy/core/dist/style.css";
 import "@uppy/drag-drop/dist/style.css";
 import "ag-grid-community/dist/styles/ag-grid.css";
@@ -132,15 +126,14 @@ function App() {
   }, [files]);
 
   //<div className='app'>{user.isLoggedIn ? <Main/> : <Login getFiles={getFiles}/>}</div>
+  {/** <Login getFiles={getFiles} />*/}
   return (
     <div className="">
       <Routes>
         <Route
           path="/"
           element={
-
-              user.isLoggedIn ? <Main/> : <Login getFiles={getFiles} />
-
+              user.isLoggedIn ?   <Main/>   : <Login getFiles={getFiles} />
           }
         />
         <Route path="/stream/:fileUuid" element={<Stream/>} />

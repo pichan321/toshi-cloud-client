@@ -12,6 +12,7 @@
     background: white;
     border-radius: 15px;
     color: black;
+    z-index: -1;
 }
 
 .line {

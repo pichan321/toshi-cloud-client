@@ -11,7 +11,7 @@ export default function SearchBar(props) {
       <InputGroup inside>
         <Input placeholder={"Search file"} onChange={(e) => props.setSearch(e)}/>
         <InputGroup.Button>
-          <SearchIcon />
+          <SearchIcon onClick={() => props.getFiles()}/>
         </InputGroup.Button>
       </InputGroup>
     </div>
