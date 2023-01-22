@@ -64,6 +64,7 @@ export default function Login({getFiles}) {
             dispatch(userActions.updateEmail(response.email))
             dispatch(userActions.updateUsername(response.username))
             dispatch(userActions.updateIsLoggedIn(true))
+            dispatch(userActions.updateToken(token))
        } catch {
             navigate("/")
             return
@@ -90,6 +91,7 @@ export default function Login({getFiles}) {
                 dispatch(userActions.updatePassword(""))
                 localStorage.setItem("@toshi-cloud-token", response.token)
                 dispatch(userActions.updateToken(response.token))
+                dispatch(userActions.updateToken(response.email))
             }, 2000)
         } catch {
             setLoading(false)

@@ -54,24 +54,14 @@ export default function FileView({ files, getFiles, showHidden, search}) {
 
   return (
     <div>
-
-
-
       <div className="container-fluid" style={{height: "auto", color: "black", width: `${width}vw`}}>
-
-        <div className="row">
-      
-          </div>
-
-
-<div className="container-fluid file-view pt-5 pb-5">
-<div className="col-12">
+        <div className="container-fluid file-view pt-5 pb-5">
+          <div className="col-12">
             <UploadView files={files} getFiles={getFiles} />
           </div>
+          <List sx={{ width: '100%', bgcolor: 'background.paper' }} style={{borderRadius: 15}}> {/**style={{borderRadius: 15}} */}
+          {files.map((file) => {
 
-    <List sx={{ width: '100%', bgcolor: 'background.paper' }} style={{borderRadius: 15}}>
-{search == "" ?
-              files.map((file) => {
                 if (file.status === "100.0" && file.hidden === false) {
                   return (
                     (<>
@@ -138,10 +128,6 @@ export default function FileView({ files, getFiles, showHidden, search}) {
   
 
    </ListItem>
-
-
-
-
               </div>
               <div className="col-2">
                 <div className="menu-vertical-container" style={{height: "100%", display: "flex", justifyContent: "end", alignItems: "center", width: "100%"}}>
@@ -158,160 +144,12 @@ export default function FileView({ files, getFiles, showHidden, search}) {
                     
                   );
                 }
-              }):
-              
-              files.map((file) => {
-                if (file.status === "100.0" && file.hidden === false && file.name.toLowerCase().includes(search.toLowerCase())) {
-                  return (
-                    (<>
-            <div className="row">
-              <div className="col-10">
-              <ListItem style={{ width: '100%', height: "auto"}}>
-     
-     <ListItemAvatar>
-       <Avatar>
-        <FileAvatar type={extract_filename(file.name).split(".")[extract_filename(file.name).split(".").length - 1]}/>
-       </Avatar>
-
-     </ListItemAvatar>
-     <ListItemText 
-     primary={<div style={{fontWeight: "bold"}}>{extract_filename(file.name)}</div>} 
-     secondary={
-     <div>
-       <p><strong>Size:</strong> {file.size}</p> 
-       <p><strong>Uploaded Date:</strong> {file.uploadedDate}</p> 
-     </div>} />
-
-       {/**      <MenuVertical file={file} getFiles={getFiles} />*/}
-  
-
-   </ListItem>
-
-
-
-
-              </div>
-              <div className="col-2">
-                <div className="menu-vertical-container" style={{height: "100%", display: "flex", justifyContent: "end", alignItems: "center", width: "100%"}}>
-                  <MenuVertical file={file} getFiles={getFiles}/>
-                </div>
-              
-              </div>
-              <Divider variant="inset" component="li" />
-            </div>
-
-            
-          </>)
-                  );
-                } else if (showHidden  && file.name.toLowerCase().includes(search.toLowerCase())) {
- 
-                  return (
-           
-                    (<>
-            <div className="row">
-              <div className="col-10">
-              <ListItem style={{ width: '100%', height: "auto"}}>
-     
-     <ListItemAvatar>
-       <Avatar>
-        <FileAvatar type={extract_filename(file.name).split(".")[extract_filename(file.name).split(".").length - 1]}/>
-       </Avatar>
-
-     </ListItemAvatar>
-     <ListItemText 
-     primary={<div style={{fontWeight: "bold"}}><img src="https://img.icons8.com/nolan/512/hide.png" alt="Hidden" width={30} height={30}/>{extract_filename(file.name)}</div>} 
-     secondary={
-     <div>
-       <p><strong>Size:</strong> {file.size}</p> 
-       <p><strong>Uploaded Date:</strong> {file.uploadedDate}</p> 
-     </div>} />
-
-       {/**      <MenuVertical file={file} getFiles={getFiles} />*/}
-  
-
-   </ListItem>
-
-
-
-
-              </div>
-              <div className="col-2">
-                <div className="menu-vertical-container" style={{height: "100%", display: "flex", justifyContent: "end", alignItems: "center", width: "100%"}}>
-                  <MenuVertical file={file} getFiles={getFiles}/>
-                </div>
-              
-              </div>
-              <Divider variant="inset" component="li" />
-            </div>
-
-            
-          </>)
-                  );
-                }
-              })
-              }
+              })}
               </List>
      
      </div>
      </div>
-    
-      <div className="container-fluid" style={{height: "auto", color: "black", width: `${width}vw`}}>
 
-      <div className="container-fluid file-view pt-5 pb-5">
-   
-  
-          <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-        {files.map(file => {
-          return  (<>
-            <div className="row">
-              <div className="col-10">
-              <ListItem style={{ width: '100%', height: "auto"}}>
-     
-     <ListItemAvatar>
-       <Avatar>
-        <FileAvatar type={extract_filename(file.name).split(".")[extract_filename(file.name).split(".").length - 1]}/>
-       </Avatar>
-
-     </ListItemAvatar>
-     <ListItemText 
-     primary={<div style={{fontWeight: "bold"}}><img src="https://img.icons8.com/nolan/512/hide.png" alt="Hidden" width={30} height={30}/>{extract_filename(file.name)}</div>} 
-     secondary={
-     <div>
-       <p><strong>Size:</strong> {file.size}</p> 
-       <p><strong>Uploaded Date:</strong> {file.uploadedDate}</p> 
-     </div>} />
-
-       {/**      <MenuVertical file={file} getFiles={getFiles} />*/}
-  
-
-   </ListItem>
-
-
-
-
-              </div>
-              <div className="col-2">
-                <div className="menu-vertical-container" style={{height: "100%", display: "flex", justifyContent: "end", alignItems: "center", width: "100%"}}>
-                  <MenuVertical file={file} getFiles={getFiles}/>
-                </div>
-              
-              </div>
-              <Divider variant="inset" component="li" />
-            </div>
-
-            
-          </>)
-
-
-            })}
-
-           
-    </List>
-     
-                     </div>
-
-
-        </div>
       </div>
     
 

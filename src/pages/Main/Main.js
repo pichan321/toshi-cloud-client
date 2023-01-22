@@ -28,13 +28,34 @@ import { Checkbox } from 'rsuite';
 import { Input, InputGroup, Grid, Row, Col } from 'rsuite';
 import SearchIcon from '@rsuite/icons/Search';
 import SearchBar from '../../components/SearchBar/SearchBar';
-
+import Avatar from '@mui/material/Avatar';
+import Divider from '@mui/material/Divider';
+import Modal from "../../components/Modal/Modal";
+import {
+  Box,
+  Center,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverBody,
+  PopoverFooter,
+  PopoverArrow,
+  PopoverCloseButton,
+  PopoverAnchor,
+  Wrap,
+  WrapItem,
+  AvatarGroup,
+} from '@chakra-ui/react'
+import ChangePassword from '../../components/ChangePassword/ChangePassword';
+// import ChangePassword from '../ChangePassword/ChangePassword';
 
 export default function Main() {
     const user = useSelector(state => state.user)
     const dispatch = useDispatch()
     const gridRef = useState(null)
     const [files, setFiles] = useState([])
+    const [changePasswordModal, setChangePasswordModal] = useState(false)
     const [showHidden, setShowHidden] = useState(false)
     const [search, setSearch] = useState("")
 
@@ -62,7 +83,8 @@ export default function Main() {
     //   ]);
 
       async function getFiles() {
-        let response = await get(`${API_URL}/get-files/${user.uuid}`)
+
+        let response = await get(`${API_URL}/get-files/${user.uuid}?search=${search}&showHidden=${showHidden}`)
         setFiles(response)
       }
     
@@ -71,7 +93,7 @@ export default function Main() {
           getFiles()
         }, 5000);
         return () => clearInterval(interval);
-      }, []);
+      }, [user, search]);
     
      
     
@@ -109,14 +131,58 @@ export default function Main() {
 
     useEffect(() => {
       getFiles()
+    }, [search])
+
+    useEffect(() => {
+      getFiles()
     }, [])
 
     return (
-        <div className="main" style={{background: "black"}}>
-        <div className='logout-button-container'>
- 
-                <img src="https://cdn-icons-png.flaticon.com/512/8914/8914308.png" onClick={() => logout()} className="logout-button"/>
+      <>
 
+  
+      <div className="main">
+        <div className='user-popover-container'>
+          <Popover alignItems="center">
+            <PopoverTrigger>
+              <Avatar src="https://otakuusamagazine.com/wp-content/uploads/2021/09/gunmachan.jpg" className='user-avatar'/>
+            </PopoverTrigger>
+            <PopoverContent borderColor="black">
+              <div className='user-popover p-3'>
+                <PopoverHeader alignItems={"center"}>
+                    <Center>
+                    <Wrap>
+                      <WrapItem>
+                        <Avatar name={user.username} src='https://otakuusamagazine.com/wp-content/uploads/2021/09/gunmachan.jpg' sx={{width: 100, height: 100}}/>
+                      </WrapItem>
+                    </Wrap>
+                    </Center>
+                    <div className='m-2'>
+                      <p><strong>Username:</strong> {user.username}</p>
+                      <p><strong>Email:</strong> {user.email}</p>
+                    </div>
+                 
+                </PopoverHeader>
+                <PopoverBody>
+                  <Box>
+                    <Divider color={"black"}/>
+                    <div className='popover-icon m-1' onClick={() => setChangePasswordModal(true)}>
+                      <img src="https://cdn-icons-png.flaticon.com/512/3256/3256783.png" alt="" width={35} height={35}/> Change Password
+                    </div>
+                    <Divider color={"black"}/>
+                    <div className='popover-icon m-1' onClick={() => logout()}>
+                      <img src="https://img.icons8.com/plasticine/512/logout-rounded.png" alt="" width={40} height={40}/> Log Out
+                    </div>
+                    <Divider color={"black"}/>
+                  </Box>
+                </PopoverBody>
+              
+  
+ 
+              </div>
+            </PopoverContent>
+          </Popover>
+          {/* <Modal Component={<ChangePassword/>} close={null}/> */}
         </div>
 
           <div className='row align-items-center'>
@@ -124,14 +190,23 @@ export default function Main() {
               <Upload user={user}/>
             </div>
             <div className='col-12 col-md-6 p-3'>
-              <SearchBar setSearch={setSearch}/>
+            <div style={{width: "100%"}}>
+                <InputGroup inside style={{zIndex: 999}}>
+                  <Input placeholder={"Search file"} onChange={(e) => setSearch(e)}/>
+                  <InputGroup.Button>
+                    <SearchIcon onClick={() => getFiles()}/>
+                  </InputGroup.Button>
+                </InputGroup>
+              </div>
             </div>
 
   
 
           </div>
           <Checkbox style={{color: "white"}} checked={showHidden} onChange={(e, checked) => setShowHidden(checked)}>Show Hidden Files</Checkbox>
-   
+        
+          {changePasswordModal && <Modal Component={ChangePassword} close={() => setChangePasswordModal(false)}/>}
+
         <div className='container-fluid'>
           <div className='row'>
             <div className='col-12'>
@@ -157,5 +232,9 @@ export default function Main() {
                 
         </div>
       </div>
+          
+  
+     
+      </>
     )
 }

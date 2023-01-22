@@ -119,12 +119,8 @@ export default function MenuVerticalOptions({file, getFiles, setShowOptions, sho
                             <p><img src="https://img.icons8.com/external-soft-fill-juicy-fish/512/external-delete-folders-soft-fill-soft-fill-juicy-fish.png" alt="Delete" width={30} height={30}/> Delete</p>
                         </div>
                     </div>
-                   
                 </div>
-     
             </div>
-     
-
         </div>
     )
 }
