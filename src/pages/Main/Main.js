@@ -58,6 +58,7 @@ export default function Main() {
     const [changePasswordModal, setChangePasswordModal] = useState(false)
     const [showHidden, setShowHidden] = useState(false)
     const [search, setSearch] = useState("")
+    const [quota, setQuota] = useState("0.0")
 
 
     // const [columnDefs] = useState([
@@ -83,14 +84,19 @@ export default function Main() {
     //   ]);
 
       async function getFiles() {
-
         let response = await get(`${API_URL}/get-files/${user.uuid}?search=${search}&showHidden=${showHidden}`)
         setFiles(response)
+      }
+
+      async function getQuota() {
+        let response = await get(`${API_URL}/get-quota/${user.uuid}`)
+        setQuota(response)
       }
     
       useEffect(() => {
         const interval = setInterval(() => {
           getFiles()
+          getQuota()
         }, 5000);
         return () => clearInterval(interval);
       }, [user, search]);
@@ -145,7 +151,7 @@ export default function Main() {
         <div className='user-popover-container'>
           <Popover alignItems="center">
             <PopoverTrigger>
-              <Avatar src="https://otakuusamagazine.com/wp-content/uploads/2021/09/gunmachan.jpg" className='user-avatar'/>
+              <Avatar src="https://i.ibb.co/8r0FxHV/1635551967565.jpg" className='user-avatar'/>
             </PopoverTrigger>
             <PopoverContent borderColor="black">
               <div className='user-popover p-3'>
@@ -153,13 +159,14 @@ export default function Main() {
                     <Center>
                     <Wrap>
                       <WrapItem>
-                        <Avatar name={user.username} src='https://otakuusamagazine.com/wp-content/uploads/2021/09/gunmachan.jpg' sx={{width: 100, height: 100}}/>
+                        <Avatar name={user.username} src='https://i.ibb.co/8r0FxHV/1635551967565.jpg' sx={{width: 100, height: 100}}/>
                       </WrapItem>
                     </Wrap>
                     </Center>
                     <div className='m-2'>
                       <p><strong>Username:</strong> {user.username}</p>
                       <p><strong>Email:</strong> {user.email}</p>
+                      <p><strong>Storage Quota:</strong> {quota} / 1000.0 GB</p>
                     </div>
                  
                 </PopoverHeader>

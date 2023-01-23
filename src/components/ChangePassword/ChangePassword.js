@@ -5,6 +5,7 @@ import { API_URL, post } from "../../utils/API";
 import { useSelector } from "react-redux";
 import Form from 'react-bootstrap/Form';
 import { FormGroup, TextField } from "@mui/material";
+import { ToastContainer, toast } from 'react-toastify';
 
 export default function ChangePassword({close}) {
     const [name, setName] = useState("")
@@ -20,19 +21,42 @@ export default function ChangePassword({close}) {
 
     async function changePassword() {
         setLoading(true)
-        console.log(password)
+        var response
         try {
-            let response = await post(`${API_URL}/change-password`, {...password, token: user.token})
-            console.log(response)
+            response = await post(`${API_URL}/change-password`, {...password, token: user.token})
         } catch {
             setLoading(false)
+            toast.error("Unable to change password. Please try again.")
+            return
+        }
+        if (response.code !== 200 ) {
+            setLoading(false)
+            toast.error("Unable to change password. Please try again.")
+            return
         }
         setLoading(false)
-        close(false)
+        toast.success("Your password has been changed successfully!")
+        setTimeout(() => {
+            close(false)
+        }, 3000)
+  
+
       }
 
     return (
         <div>
+            <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="dark"
+            />
         <div className="container-fluid">
             <div className="row d-flex justify-content-end" >
                 <div className="d-flex justify-content-end modal-close-button-container">

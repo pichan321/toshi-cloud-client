@@ -79,9 +79,9 @@ export default function Login({getFiles}) {
         setLoading(true)
         try {
             let response = await post(`${API_URL}/login`, user)
-            if (response.code === 404 || response.code === 500) {
+            if (response.code === 404 || response.code === 500 || response.token === undefined) {
                 setLoading(false)
-                toast.error("Wrong credentials!")
+                toast.error("Unable to log you in. Please try again!")
                 return
             } 
             toast.success("Loggin in")
@@ -90,8 +90,8 @@ export default function Login({getFiles}) {
                 dispatch(userActions.updateUuid(response.uuid))
                 dispatch(userActions.updatePassword(""))
                 localStorage.setItem("@toshi-cloud-token", response.token)
+                dispatch(userActions.updateEmail(response.email))
                 dispatch(userActions.updateToken(response.token))
-                dispatch(userActions.updateToken(response.email))
             }, 2000)
         } catch {
             setLoading(false)

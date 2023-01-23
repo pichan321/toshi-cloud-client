@@ -4,6 +4,7 @@ import './ParseText.css'
 import { API_URL, post } from "../../utils/API";
 import { useSelector } from "react-redux";
 import Form from 'react-bootstrap/Form';
+import { ToastContainer, toast } from 'react-toastify';
 
 export default function ParseText({close}) {
     const [name, setName] = useState("")
@@ -13,17 +14,40 @@ export default function ParseText({close}) {
 
     async function parseUpload() {
         setLoading(true)
+        var response
         try {
-            let response = await post(`${API_URL}/parse-and-upload`, {name: name, content: text, user: user.uuid})
+            response = await post(`${API_URL}/parse-and-upload`, {name: name, content: text, user: user.uuid})
         } catch {
             setLoading(false)
+            toast.error("Unable to parse and upload your text. Sorry!")
+            return
+        }
+        if (response.code != 200) {
+            setLoading(false)
+            toast.error("Unable to parse and upload your text. Sorry!")
+            return
         }
         setLoading(false)
-        close(false)
+        toast.success("Your file is being processed. Check your library.")
+        setTimeout(() => {
+            close(false)
+        }, 3000)
       }
 
     return (
         <div>
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark"
+             />
         <div className="container-fluid">
             <div className="row d-flex justify-content-end" >
                 <div className="d-flex justify-content-end modal-close-button-container">
