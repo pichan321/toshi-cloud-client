@@ -1,4 +1,4 @@
-import "./FileView.css";
+import './ShareFileView.css'
 import DownloadButton from "../Button/DownloadButton";
 import DeleteButton from "../Button/DeleteButton";
 import UploadView from "../UploadView/UploadView";
@@ -22,7 +22,7 @@ import { useEffect, useState } from "react";
 import FileAvatar from "./FileAvatar";
 
 
-export default function FileView({ files, getFiles, showHidden, search}) {
+export default function ShareFileView({ files, getFiles, showHidden, search}) {
   const navigate = useNavigate();
   const [width, setWidth] = useState(100)
  
@@ -73,7 +73,7 @@ export default function FileView({ files, getFiles, showHidden, search}) {
       <FileAvatar type={extract_filename(file.name).split(".")[extract_filename(file.name).split(".").length - 1]}/>
      </ListItemAvatar>
      <ListItemText 
-     primary={<div style={{fontWeight: "bold"}}>{file.shared_file && <img src="https://img.icons8.com/plasticine/512/share.png" alt="Shared File" width={30} height={30}/>} {extract_filename(file.name)}</div>} 
+     primary={<div style={{fontWeight: "bold"}}>{extract_filename(file.name)}</div>} 
      secondary={
      <div>
        <p><strong>Size:</strong> {file.size}</p> 
@@ -81,6 +81,7 @@ export default function FileView({ files, getFiles, showHidden, search}) {
      </div>} />
 
        {/**      <MenuVertical file={file} getFiles={getFiles} />*/}
+  
 
    </ListItem>
 
@@ -116,7 +117,7 @@ export default function FileView({ files, getFiles, showHidden, search}) {
 
      </ListItemAvatar>
      <ListItemText 
-     primary={<div style={{fontWeight: "bold"}}><img src="https://img.icons8.com/nolan/512/hide.png" alt="Hidden" width={30} height={30}/> {file.shared_file && <img src="https://img.icons8.com/plasticine/512/share.png" alt="Shared File" width={30} height={30}/>} {extract_filename(file.name)}</div>} 
+     primary={<div style={{fontWeight: "bold"}}><img src="https://img.icons8.com/nolan/512/hide.png" alt="Hidden" width={30} height={30}/>{extract_filename(file.name)}</div>} 
      secondary={
      <div>
        <p><strong>Size:</strong> {file.size}</p> 

@@ -48,6 +48,8 @@ import {
   AvatarGroup,
 } from '@chakra-ui/react'
 import ChangePassword from '../../components/ChangePassword/ChangePassword';
+import Sharing from '../../components/Sharing/Sharing';
+import ShareFileView from '../../components/ShareFileView/ShareFileView';
 // import ChangePassword from '../ChangePassword/ChangePassword';
 
 export default function Main() {
@@ -56,9 +58,13 @@ export default function Main() {
     const gridRef = useState(null)
     const [files, setFiles] = useState([])
     const [changePasswordModal, setChangePasswordModal] = useState(false)
+    const [sharingModal, setSharingModal] = useState(false)
     const [showHidden, setShowHidden] = useState(false)
     const [search, setSearch] = useState("")
     const [quota, setQuota] = useState("0.0")
+    const [showMain, setShowMain] = useState(false)
+    const [showShareFiles, setShowShareFiles] = useState(false)
+    const profileRef = useRef(null)
 
 
     // const [columnDefs] = useState([
@@ -135,6 +141,10 @@ export default function Main() {
         dispatch(userActions.updateIsLoggedIn(false))
     }
 
+    async function uploadProfile() {
+
+    }
+
     useEffect(() => {
       getFiles()
     }, [search])
@@ -173,8 +183,14 @@ export default function Main() {
                 <PopoverBody>
                   <Box>
                     <Divider color={"black"}/>
-                    <div className='popover-icon m-1' onClick={() => setChangePasswordModal(true)}>
+                      <div className='popover-icon m-1' onClick={() => profileRef.current.click()}>
+                        <img src="https://img.icons8.com/dusk/256/edit-user-female.png" alt="" width={35} height={35}/> Change Profile Picture
+                        <input ref={profileRef} onChange={() => uploadProfile} type='file' hidden={true}/>
+                      </div>
+                    <Divider color={"black"}/>
+                    <div className='popover-icon m-1' onClick={() => null}>
                       <img src="https://cdn-icons-png.flaticon.com/512/3256/3256783.png" alt="" width={35} height={35}/> Change Password
+                   
                     </div>
                     <Divider color={"black"}/>
                     <div className='popover-icon m-1' onClick={() => logout()}>
