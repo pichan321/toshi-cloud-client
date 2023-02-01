@@ -1,11 +1,15 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import DeleteButton from "../Button/DeleteButton";
 import DownloadButton from "../Button/DownloadButton";
 import './MenuVertical.css'
-import { CLIENT_URL, API_URL, get, post } from "../../utils/API";
+import { CLIENT_URL, API_URL, get, post, DELETE } from "../../utils/API";
 import { extract_filename } from "../../utils/file";
+import Sharing from "../Sharing/Sharing";
+import { useSelector } from "react-redux";
 
 export default function MenuVerticalOptions({file, getFiles, setShowOptions, showOptions}) {
+    const user = useSelector(state => state.user)
+    const [openSharing, setOpenSharing] = useState(false)
 
     function view(file) {
         var type = file.name.split(".")
@@ -63,6 +67,16 @@ export default function MenuVerticalOptions({file, getFiles, setShowOptions, sho
         }
         // setLoading(false)
       }
+    
+    async function deleteSharedFile(file) {
+        try {
+            var response = await DELETE(`${API_URL}/delete-shared-file`, {handle: file.uuid, owner: file.userUuid, recipient: user.uuid})
+            getFiles()
+            console.log(response)
+        } catch {
+            return
+        }
+    }
 
       async function hide(file) {
         try {
@@ -97,9 +111,15 @@ export default function MenuVerticalOptions({file, getFiles, setShowOptions, sho
                         <div style={{display: "flex", alignItems: "center"}} onClick={() => downloadFile(file)}>
                             <p><img src="https://img.icons8.com/office/512/download.png" alt="Download" width={30} height={30}/> Download</p>
                         </div>
-                        
                     </div>
-                  
+                    {!file.shared_file && 
+                    <div>
+                        <div className="col-12 p-2 option-item">
+                            <div style={{display: "flex", alignItems: "center"}} onClick={() => setOpenSharing(true)}>
+                                <p><img src="https://img.icons8.com/plasticine/512/share.png" alt="Share" width={30} height={30}/> Share</p>
+                            </div>
+                        </div>
+                        <Sharing open={openSharing} setOpen={setOpenSharing} file={file}/>
                     {file.hidden ?    
                     <div className="col-12 p-2 option-item">
                         <div style={{display: "flex", alignItems: "center"}} onClick={() => unhide(file)}>
@@ -119,6 +139,18 @@ export default function MenuVerticalOptions({file, getFiles, setShowOptions, sho
                             <p><img src="https://img.icons8.com/external-soft-fill-juicy-fish/512/external-delete-folders-soft-fill-soft-fill-juicy-fish.png" alt="Delete" width={30} height={30}/> Delete</p>
                         </div>
                     </div>
+                    </div>
+                    }
+                    {file.shared_file &&
+                        <div className="col-12 p-2 option-item">
+                            <div style={{display: "flex", alignItems: "center"}} onClick={() => deleteSharedFile(file)}>
+                                <p><img src="https://img.icons8.com/external-soft-fill-juicy-fish/512/external-delete-folders-soft-fill-soft-fill-juicy-fish.png" alt="Delete" width={30} height={30}/> Delete</p>
+                            </div>
+                        </div>
+                    
+                    }
+                   
+          
                 </div>
             </div>
         </div>
