@@ -64,6 +64,7 @@ export default function Main() {
     const [quota, setQuota] = useState("0.0")
     const [showMain, setShowMain] = useState(false)
     const [showShareFiles, setShowShareFiles] = useState(false)
+    const [profile, setProfile] = useState("")
     const profileRef = useRef(null)
 
 
@@ -103,7 +104,7 @@ export default function Main() {
         const interval = setInterval(() => {
           getFiles()
           getQuota()
-        }, 5000);
+        }, 20000);
         return () => clearInterval(interval);
       }, [user, search]);
     
@@ -141,8 +142,33 @@ export default function Main() {
         dispatch(userActions.updateIsLoggedIn(false))
     }
 
-    async function uploadProfile() {
+    async function getProfile() {
+      try {
+        var response = await get(API_URL + `/get-profile/${user.uuid}`)
+        setProfile(response)
+      } catch {
+        return
+      }
+    }
 
+    async function uploadProfile(e) {
+      const form = new FormData()
+      form.append("userUuid", user.uuid)
+      form.append("file", e.target.files[0])
+      form.append("fileName", e.target.files[0].name)
+      fetch(
+          `${API_URL}/upload-profile`,
+          {
+              method: 'POST',
+              body: form,
+          }
+      )
+          .then((response) => response.json())
+          .catch((error) => {
+              console.error('Error:', error);
+          });
+      
+          setTimeout(() => {getProfile()}, 5000)
     }
 
     useEffect(() => {
@@ -150,7 +176,9 @@ export default function Main() {
     }, [search])
 
     useEffect(() => {
+      getQuota()
       getFiles()
+      getProfile()
     }, [])
 
     return (
@@ -161,7 +189,7 @@ export default function Main() {
         <div className='user-popover-container'>
           <Popover alignItems="center">
             <PopoverTrigger>
-              <Avatar src="https://i.ibb.co/8r0FxHV/1635551967565.jpg" className='user-avatar'/>
+              <Avatar src={profile} className='user-avatar'/>
             </PopoverTrigger>
             <PopoverContent borderColor="black">
               <div className='user-popover p-3'>
@@ -169,7 +197,7 @@ export default function Main() {
                     <Center>
                     <Wrap>
                       <WrapItem>
-                        <Avatar name={user.username} src='https://i.ibb.co/8r0FxHV/1635551967565.jpg' sx={{width: 100, height: 100}}/>
+                        <Avatar name={user.username} src={profile} sx={{width: 100, height: 100}}/>
                       </WrapItem>
                     </Wrap>
                     </Center>
@@ -185,7 +213,7 @@ export default function Main() {
                     <Divider color={"black"}/>
                       <div className='popover-icon m-1' onClick={() => profileRef.current.click()}>
                         <img src="https://img.icons8.com/dusk/256/edit-user-female.png" alt="" width={35} height={35}/> Change Profile Picture
-                        <input ref={profileRef} onChange={() => uploadProfile} type='file' hidden={true}/>
+                        <input ref={profileRef} onChange={(e) => uploadProfile(e)} type='file' hidden={true} accept="image/*"/>
                       </div>
                     <Divider color={"black"}/>
                     <div className='popover-icon m-1' onClick={() => null}>
