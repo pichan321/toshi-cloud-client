@@ -104,7 +104,7 @@ export default function Main() {
         const interval = setInterval(() => {
           getFiles()
           getQuota()
-        }, 20000);
+        }, 10000);
         return () => clearInterval(interval);
       }, [user, search]);
     
