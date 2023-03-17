@@ -72,7 +72,8 @@ export default function FileView({ files, getFiles, showHidden, search}) {
 
   async function deleteMultiple() {
     var response = await DELETE(`${API_URL}/delete-multiple`, checks)
-    console.log(response)
+    setDeleteMultipleModal(false)
+    setChecks([])
   }
 
   useEffect(() => {
