@@ -27,54 +27,6 @@ function App() {
   const [files, setFiles] = useState([]);
   const gridRef = useRef(null);
 
-  const [columnDefs] = useState([
-    {
-      field: "filename",
-      headerName: "File Name",
-      type: "leftAligned",
-      autoHeight: true,
-      rowHeight: 100,
-    },
-    {
-      field: "filetype",
-      headerName: "File Type",
-      type: "leftAligned",
-      autoHeight: true,
-    },
-    {
-      field: "filesize",
-      headerName: "File Size",
-      type: "leftAligned",
-      autoHeight: true,
-    },
-    {
-      field: "datestamp",
-      headerName: "Date Uploaded",
-      type: "leftAligned",
-      autoHeight: true,
-    },
-    {
-      field: "handle",
-      headerName: "",
-      cellRenderer: DownloadButton,
-      cellRendererParams: {
-        clicked: function (field) {
-          downloadFile(field);
-        },
-      },
-    },
-    {
-      field: "handle",
-      headerName: "",
-      cellRenderer: DeleteButton,
-      cellRendererParams: {
-        clicked: function (field) {
-          deleteFile(field);
-        },
-      },
-    },
-  ]);
-
   async function getFiles() {
     if (user.uuid === "") {return}
 
@@ -101,32 +53,7 @@ function App() {
       });
   }
 
-  async function deleteFile(file) {}
 
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     getFiles()
-  //   }, 10000);
-  //   return () => clearInterval(interval);
-  // }, []);
-
-  useEffect(() => {
-    if (!files) {
-      return;
-    }
-    if (gridRef === null) {
-      return;
-    }
-    try {
-      gridRef.current.api.sizeColumnsToFit();
-      const rowHeight = gridRef.current.api.getRowHeight;
-      console.log("Row height");
-      console.log(rowHeight);
-    } catch {}
-  }, [files]);
-
-  //<div className='app'>{user.isLoggedIn ? <Main/> : <Login getFiles={getFiles}/>}</div>
-  {/** <Login getFiles={getFiles} />*/}
   return (
     <div className="">
       <Routes>
