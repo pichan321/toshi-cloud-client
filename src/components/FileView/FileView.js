@@ -5,7 +5,7 @@ import UploadView from "../UploadView/UploadView";
 import { Button } from "rsuite";
 import { useNavigate, Link } from "react-router";
 import { stringToArray } from "ag-grid-community";
-import { API_URL, CLIENT_URL } from "../../utils/API";
+import { API_URL, CLIENT_URL, DELETE } from "../../utils/API";
 import { extract_filename } from "../../utils/file";
 import { get } from "../../utils/API";
 import MenuVertical from "../MenuVertical/MenuVertical";
@@ -20,11 +20,64 @@ import BeachAccessIcon from '@mui/icons-material/BeachAccess';
 import Divider from '@mui/material/Divider';
 import { useEffect, useState } from "react";
 import FileAvatar from "./FileAvatar";
-
+import Checkbox from '@mui/material/Checkbox';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
+import { Center, HStack} from '@chakra-ui/react'
 
 export default function FileView({ files, getFiles, showHidden, search}) {
   const navigate = useNavigate();
+  const [deleteMultipleModal, setDeleteMultipleModal] = useState(false)
   const [width, setWidth] = useState(100)
+  const [checks, setChecks] = useState([])
+
+  function checkAll(e) {
+
+    if (!e) {setChecks([])}
+
+    var tempArr = []
+    if (showHidden && e) {
+      files.forEach(file => {
+        if (!checks.includes(file.uuid)) {
+          tempArr.push(file.uuid)
+        }
+      });
+      setChecks(checks.concat(tempArr))
+      return
+    }
+
+    if (!showHidden && e) {
+      files.forEach(file => {
+        if (!checks.includes(file.uuid) && !file.hidden) {
+          tempArr.push(file.uuid)
+        }
+      });
+      setChecks(checks.concat(tempArr))
+      return
+    }
+  }
+
+  function checkOne(e, uuid) {
+    if (e) {
+      setChecks([...checks, uuid])
+    } else {
+      setChecks(checks.filter(eachUuid => {
+        if (eachUuid !== uuid) {
+          return eachUuid
+        }
+      }))
+    }
+  }
+
+  async function deleteMultiple() {
+    var response = await DELETE(`${API_URL}/delete-multiple`, checks)
+    console.log(response)
+  }
+
+  useEffect(() => {
+    console.log(checks)
+  }, [checks])
  
   async function viewFile(file) {
     // navigate("/stream", {state: {filename: file.name}})
@@ -54,7 +107,51 @@ export default function FileView({ files, getFiles, showHidden, search}) {
 
   return (
     <div>
+       <Modal
+        open={deleteMultipleModal}
+        onClose={() => setDeleteMultipleModal(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={{
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 'auto',
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  p: 4,
+  outline: 0,
+}}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            You are about to delete {checks.length} files. Do you still want to do so?
+            
+          </Typography>
+          <div style={{width: "100%"}}>
+  
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            <Center color='white'>
+              <HStack spacing='24px'>
+              <Box w='40px' h='40px'>
+              <Button  className="" onClick={() => deleteMultiple()} color="red" appearance="primary" m={5}>Delete</Button>
+              </Box>
+              <Box w='40px' h='40px'>
+              <Button  className="" onClick={() => setDeleteMultipleModal(false)} appearance="primary">Cancel</Button>
+              </Box>
+              </HStack>
+            </Center>
+          </Typography>
+          </div>
+        
+        </Box>
+      </Modal>
+
       <div className="container-fluid" style={{height: "auto", color: "black", width: `${width}vw`}}>
+      <Checkbox check={false} style={{borderColor: "white", backgroundColor: "white"}} className="me-3" onChange={(e) => checkAll(e.target.checked)}>Checkbox</Checkbox>
+      <Button  className="" onClick={() => setDeleteMultipleModal(true)}> {/**onClick={()=> parseUpload()} */}
+        <img src="https://cdn-icons-png.flaticon.com/512/2496/2496740.png" alt="" width={30} height={30}/>
+      </Button>
         <div className="container-fluid file-view pt-5 pb-5">
           <div className="col-12">
             <UploadView files={files} getFiles={getFiles} />
@@ -68,8 +165,10 @@ export default function FileView({ files, getFiles, showHidden, search}) {
             <div className="row">
               <div className="col-10">
               <ListItem style={{ width: '100%', height: "auto"}} key={file.uuid}>
-     
+              <Checkbox onChange={(e) => checkOne(e.target.checked, file.uuid)} checked={checks.includes(file.uuid) ? true : false}>Checkbox</Checkbox>
      <ListItemAvatar>
+    
+
       <FileAvatar type={extract_filename(file.name).split(".")[extract_filename(file.name).split(".").length - 1]}/>
      </ListItemAvatar>
      <ListItemText 
@@ -108,7 +207,7 @@ export default function FileView({ files, getFiles, showHidden, search}) {
             <div className="row">
               <div className="col-10">
               <ListItem style={{ width: '100%', height: "auto"}} key={file.uuid}>
-     
+              <Checkbox onChange={(e) => checkOne(e.target.checked, file.uuid)} checked={checks.includes(file.uuid) ? true : false}>Checkbox</Checkbox>
      <ListItemAvatar>
 
       <FileAvatar type={extract_filename(file.name).split(".")[extract_filename(file.name).split(".").length - 1]}/>
