@@ -9,6 +9,7 @@ import { API_URL } from "../../utils/API";
 import Modal from "../Modal/Modal";
 import DeleteButton from "../Button/DeleteButton";
 import ParseText from "../ParseText/ParseText";
+import axios from "axios";
 export default function Upload() {
   const [progress, setProgress] = useState("0%")
 
@@ -88,9 +89,11 @@ export default function Upload() {
     form.append("name", file.name)
     form.append("size", filesize)
     form.append("sizeMb", sizeMB)
+    var token = localStorage.getItem("@toshi-cloud")
     fetch(
         `${API_URL}/upload`,
         {
+            headers: {"Authorization": "Bearer " + token},
             method: 'POST',
             body: form,
         }
@@ -102,6 +105,7 @@ export default function Upload() {
   }
 
   async function prepareMultipartUpload(file) {
+    var token = localStorage.getItem("@toshi-cloud")
    const form = new FormData()
    form.append("userUuid", user.uuid)
    const filesize = fileSize(file.size)
@@ -114,6 +118,7 @@ export default function Upload() {
        {
            method: 'POST',
            body: form,
+           headers: {"Authorization": "Bearer " + token}
        }
    )
          .then((response) => response.json())
@@ -131,6 +136,7 @@ export default function Upload() {
     let countTotal = getTotalChunk(file.size)
     console.log("Total")
     console.log(countTotal)
+    var token = localStorage.getItem("@toshi-cloud")
     for (count; count <= countTotal + 1; ) {
       if (count > countTotal) {break}
 
@@ -153,11 +159,10 @@ export default function Upload() {
     form.append("uploadId", uploadInfo.message)
 
     try {
-      var response = await fetch(
-        `${API_URL}/multipart-upload`,
+      var response = await axios.post(
+        `${API_URL}/multipart-upload`, form,
         {
-            method: 'POST',
-            body: form,
+            headers: {"Authorization": "Bearer " + token}
         }
     )
 

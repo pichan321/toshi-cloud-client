@@ -5,7 +5,7 @@ import { API_URL, post } from "../../utils/API";
 import { useSelector } from "react-redux";
 import Form from 'react-bootstrap/Form';
 import { ToastContainer, toast } from 'react-toastify';
-
+import axios from "axios";
 export default function ParseText({close}) {
     const [name, setName] = useState("")
     const [text, setText]= useState("")
@@ -14,9 +14,10 @@ export default function ParseText({close}) {
 
     async function parseUpload() {
         setLoading(true)
+        var token = localStorage.getItem("@toshi-cloud")
         var response
         try {
-            response = await post(`${API_URL}/parse-and-upload`, {name: name, content: text, user: user.uuid})
+            response = await axios.post(`${API_URL}/parse-and-upload`, {name: name, content: text, user: user.uuid}, {headers: {"authorization": "Bearer " + token}})
         } catch {
             setLoading(false)
             toast.error("Unable to parse and upload your text. Sorry!")

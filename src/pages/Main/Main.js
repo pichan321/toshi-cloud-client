@@ -51,8 +51,13 @@ import ChangePassword from '../../components/ChangePassword/ChangePassword';
 import Sharing from '../../components/Sharing/Sharing';
 import ShareFileView from '../../components/ShareFileView/ShareFileView';
 // import ChangePassword from '../ChangePassword/ChangePassword';
+import { useAuth0 } from "@auth0/auth0-react";
+import axios from 'axios';
+
 
 export default function Main() {
+    // const { user: USER, isAuthenticated, isLoading, loginWithRedirect, logout: Auth0Logout} = useAuth0();
+    const navigate = useNavigate()
     const user = useSelector(state => state.user)
     const dispatch = useDispatch()
     const gridRef = useState(null)
@@ -66,6 +71,8 @@ export default function Main() {
     const [showShareFiles, setShowShareFiles] = useState(false)
     const [profile, setProfile] = useState("")
     const profileRef = useRef(null)
+
+    const { user: USER, isAuthenticated, isLoading, loginWithRedirect, getIdTokenClaims, logout: Auth0Logout} = useAuth0();
 
 
     // const [columnDefs] = useState([
@@ -91,13 +98,16 @@ export default function Main() {
     //   ]);
 
       async function getFiles() {
-        let response = await get(`${API_URL}/get-files/${user.uuid}?search=${search}&showHidden=${showHidden}`)
-        setFiles(response)
+        var token = localStorage.getItem("@toshi-cloud")
+        var response = await axios.get(`${API_URL}/get-files?search=${search}&showHidden=${showHidden}`, {headers: {"authorization": "Bearer " + token}})
+        setFiles(response.data)
       }
 
       async function getQuota() {
-        let response = await get(`${API_URL}/get-quota/${user.uuid}`)
-        setQuota(response)
+        var token = localStorage.getItem("@toshi-cloud")
+        var response = await axios.get(`${API_URL}/get-quota`, {headers: {"authorization": "Bearer " + token}})
+        console.log(response)
+        setQuota(response.data)
       }
     
       useEffect(() => {
@@ -137,11 +147,6 @@ export default function Main() {
      
     }, [files])
 
-    function logout() {
-        localStorage.removeItem("@toshi-cloud-token")
-        dispatch(userActions.updateIsLoggedIn(false))
-    }
-
     async function getProfile() {
       try {
         var response = await get(API_URL + `/get-profile/${user.uuid}`)
@@ -156,9 +161,13 @@ export default function Main() {
       form.append("userUuid", user.uuid)
       form.append("file", e.target.files[0])
       form.append("fileName", e.target.files[0].name)
+      var token = localStorage.getItem("@toshi-cloud")
       fetch(
           `${API_URL}/upload-profile`,
           {
+              headers: {
+                "Authorization": "Bearer " + token
+              },
               method: 'POST',
               body: form,
           }
@@ -175,21 +184,63 @@ export default function Main() {
       getFiles()
     }, [search])
 
+    const logout = () => {
+      localStorage.removeItem("@toshi-cloud")
+      dispatch(userActions.updateIsLoggedIn(false))
+      Auth0Logout()
+    }
+
     useEffect(() => {
-      getQuota()
-      getFiles()
-      getProfile()
-    }, [])
+      const getUserMetadata = async () => {
+          var response = await getIdTokenClaims()
+
+          if (response === null || response === undefined) {
+            return
+          }
+          var response = await axios.get(`${API_URL}/profile`, {headers: {"authorization": "Bearer " + response.__raw}})
+          console.log(response)
+          if (response.status !== 200) {
+            return
+          }
+          console.log("Dispatching")
+          dispatch(userActions.updateMetadata(response.data))
+          dispatch(userActions.updateIsLoggedIn(true))
+      }
+      getUserMetadata()
+     
+  }, [isAuthenticated, USER?.sub])
+
+  useEffect(() => {
+    if (!user?.isLoggedIn) {
+      navigate("/")
+    }
+  }, [])
+
+  useEffect(() => {
+    console.log(user)
+  })
 
     return (
       <>
-
-  
-      <div className="main">
-        <div className='user-popover-container'>
-          <Popover alignItems="center">
+        <div className='background'>
+          <div className='grid grid-cols-12'>
+            <div className='col-span-4'>
+                <Upload user={user}/>
+                <Checkbox style={{color: "white"}} checked={showHidden} onChange={(e, checked) => setShowHidden(checked)}>Show Hidden Files</Checkbox>
+            </div>
+            <div className='col-span-6'>
+                <InputGroup inside style={{zIndex: 999}}>
+                  <Input placeholder={"Search file"} onChange={(e) => setSearch(e)}/>
+                  <InputGroup.Button>
+                    <SearchIcon onClick={() => getFiles()}/>
+                  </InputGroup.Button>
+                </InputGroup>
+            </div>
+            <div className=''>
+            <div style={{position: "absolute", right: "1em", top: "1em"}}>
+        <Popover alignItems="center" className="" >
             <PopoverTrigger>
-              <Avatar src={profile} className='user-avatar'/>
+              <Avatar src={user?.metadata?.picture}  className='user-avatar'/>
             </PopoverTrigger>
             <PopoverContent borderColor="black">
               <div className='user-popover p-3'>
@@ -197,13 +248,13 @@ export default function Main() {
                     <Center>
                     <Wrap>
                       <WrapItem>
-                        <Avatar name={user.username} src={profile} sx={{width: 100, height: 100}}/>
+                        <Avatar name={user?.username} src={user?.metadata?.picture} sx={{width: 100, height: 100}}/>
                       </WrapItem>
                     </Wrap>
                     </Center>
                     <div className='m-2'>
-                      <p><strong>Username:</strong> {user.username}</p>
-                      <p><strong>Email:</strong> {user.email}</p>
+                      <p><strong>Username:</strong> {user?.metadata?.nickname}</p>
+                      <p><strong>Email:</strong> {user?.metadata?.email}</p>
                       <p><strong>Storage Quota:</strong> {quota} / 1000.0 GB</p>
                     </div>
                  
@@ -211,18 +262,12 @@ export default function Main() {
                 <PopoverBody>
                   <Box>
                     <Divider color={"black"}/>
-                      <div className='popover-icon m-1' onClick={() => profileRef.current.click()}>
-                        <img src="https://img.icons8.com/dusk/256/edit-user-female.png" alt="" width={35} height={35}/> Change Profile Picture
-                        <input ref={profileRef} onChange={(e) => uploadProfile(e)} type='file' hidden={true} accept="image/*"/>
-                      </div>
-                    <Divider color={"black"}/>
-                    <div className='popover-icon m-1' onClick={() => null}>
-                      <img src="https://cdn-icons-png.flaticon.com/512/3256/3256783.png" alt="" width={35} height={35}/> Change Password
-                   
-                    </div>
-                    <Divider color={"black"}/>
                     <div className='popover-icon m-1' onClick={() => logout()}>
-                      <img src="https://img.icons8.com/plasticine/512/logout-rounded.png" alt="" width={40} height={40}/> Log Out
+                      <span className='flex items-center'>
+                        <img src="https://img.icons8.com/plasticine/512/logout-rounded.png" alt="" width={40} height={40}/>
+                        <p>Log Out</p>
+                      </span>
+                
                     </div>
                     <Divider color={"black"}/>
                   </Box>
@@ -233,59 +278,50 @@ export default function Main() {
               </div>
             </PopoverContent>
           </Popover>
-          {/* <Modal Component={<ChangePassword/>} close={null}/> */}
         </div>
 
-          <div className='row align-items-center'>
-            <div className='col-12 col-md-3'>
-              <Upload user={user}/>
             </div>
-            <div className='col-12 col-md-6 p-3'>
-            <div style={{width: "100%"}}>
-                <InputGroup inside style={{zIndex: 999}}>
-                  <Input placeholder={"Search file"} onChange={(e) => setSearch(e)}/>
-                  <InputGroup.Button>
-                    <SearchIcon onClick={() => getFiles()}/>
-                  </InputGroup.Button>
-                </InputGroup>
-              </div>
-            </div>
-
-  
-
           </div>
-          <Checkbox style={{color: "white"}} checked={showHidden} onChange={(e, checked) => setShowHidden(checked)}>Show Hidden Files</Checkbox>
-        
-          {changePasswordModal && <Modal Component={ChangePassword} close={() => setChangePasswordModal(false)}/>}
+          <div>
 
-        <div className='container-fluid'>
-          <div className='row'>
-            <div className='col-12'>
-              <div className="ag-theme-alpine-dark ag-grid-container">
+            <FileView files={files} getFiles={getFiles} showHidden={showHidden} search={search}/>
+          </div>
+
   
-              {files.length > 0 ?
-              <div className='container-fluid'>
-                <div className='row'>
-                  <div className='col-12'>
-                    <FileView files={files} getFiles={getFiles} showHidden={showHidden} search={search}/>
-                  </div>
-                
-                </div>
-              </div>  
-           
+         
+        </div>
+           {/* <Modal Component={<ChangePassword/>} close={null}/> */}
+
+           {/* {files?.length > 0 ?
+    <div className='container-fluid'>
+      <div className='row'>
+        <div className='col-12'>
+          <FileView files={files} getFiles={getFiles} showHidden={showHidden} search={search}/>
+        </div>
       
-               : null }
-     
-              </div>
-            </div>
-                
-          </div>
-                
-        </div>
       </div>
-          
+    </div>  
+ 
+
+     : null } */}
+
+
+
+
+<div className='container-fluid'>
+<div className='row'>
+  <div className='col-12'>
+    <div className="ag-theme-alpine-dark ag-grid-container">
+
   
-     
+
+    </div>
+  </div>
+      
+</div>
+      
+</div> 
+        
       </>
     )
 }

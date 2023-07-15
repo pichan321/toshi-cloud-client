@@ -10,7 +10,14 @@ export default function DownloadButton({getFiles, file}) {
     async function downloadFile(file) {
        setLoading(true)
        try {
-        await fetch(`${API_URL}/file/download/${file.uuid}`)
+
+        var token = localStorage.getItem("@toshi-cloud")
+        console.log(token)
+        await fetch(`${API_URL}/file/download/${file.uuid}`, {
+          method: "GET",
+          mode: "CORS",
+          headers: {"authorization": "Bearer " + token}
+        })
         .then(response => response.json())
         .then(response => {
             var a = document.createElement('a');
