@@ -115,7 +115,7 @@ export default function FileView({ files, getFiles, showHidden, search}) {
   console.log();
 
   return (
-    <div>
+    <div className="">
        <Modal
         open={deleteMultipleModal}
         onClose={() => setDeleteMultipleModal(false)}
