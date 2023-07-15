@@ -6,7 +6,7 @@ import { CLIENT_URL, API_URL, get, post, DELETE } from "../../utils/API";
 import { extract_filename } from "../../utils/file";
 import Sharing from "../Sharing/Sharing";
 import { useSelector } from "react-redux";
-
+import axios from "axios";
 export default function MenuVerticalOptions({file, getFiles, setShowOptions, showOptions}) {
     const user = useSelector(state => state.user)
     const [openSharing, setOpenSharing] = useState(false)
@@ -16,10 +16,10 @@ export default function MenuVerticalOptions({file, getFiles, setShowOptions, sho
         type = type[type.length - 1]
         if (type === "mp4") {
             viewFile(file)
+            return
         }
- 
-        var supportedFileTypes = ["txt", "jpg", "png", "gif"]
-        if (supportedFileTypes.includes(type)) {getFileContent(file)}
+
+        getFileContent(file)
 
 
     }
@@ -34,7 +34,13 @@ export default function MenuVerticalOptions({file, getFiles, setShowOptions, sho
 
     async function downloadFile(file) {
         try {
-         await fetch(`${API_URL}/file/download/${file.uuid}`)
+            var token = localStorage.getItem("@toshi-cloud")
+            await fetch(`${API_URL}/file/download/${file.uuid}`, {
+                method: "GET",
+                headers: {
+                    "Authorization": "Bearer " + token
+                }
+        })
          .then(response => response.json())
          .then(response => {
              var a = document.createElement('a');
@@ -59,7 +65,8 @@ export default function MenuVerticalOptions({file, getFiles, setShowOptions, sho
      async function deleteFile(file) {
         // setLoading(true)
         try {
-          var response = await get(`${API_URL}/file/delete/${file.uuid}`)
+            var token = localStorage.getItem("@toshi-cloud")
+          var response = await axios.get(`${API_URL}/file/delete/${file.uuid}`, {headers: {"Authorization": "Bearer " + token}})
           setShowOptions(false)
           getFiles()
         } catch {
@@ -80,7 +87,9 @@ export default function MenuVerticalOptions({file, getFiles, setShowOptions, sho
 
       async function hide(file) {
         try {
-            var response = await get(`${API_URL}/file/hide/${file.uuid}`)
+            var token = localStorage.getItem("@toshi-cloud")
+            console.log("here")
+            var response = await axios.get(`${API_URL}/file/hide/${file.uuid}`, {headers: {"Authorization": "Bearer " + token}})
             setShowOptions(false)
             getFiles()
           } catch {
@@ -90,7 +99,8 @@ export default function MenuVerticalOptions({file, getFiles, setShowOptions, sho
 
       async function unhide(file) {
         try {
-            var response = await get(`${API_URL}/file/unhide/${file.uuid}`)
+            var token = localStorage.getItem("@toshi-cloud")
+            var response = await axios.get(`${API_URL}/file/unhide/${file.uuid}`, {headers: {"Authorization": "Bearer " + token}})
             setShowOptions(false)
             getFiles()
           } catch {

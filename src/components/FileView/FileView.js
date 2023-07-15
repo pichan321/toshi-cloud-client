@@ -25,6 +25,7 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import { Center, HStack} from '@chakra-ui/react'
+import axios from "axios";
 
 export default function FileView({ files, getFiles, showHidden, search}) {
   const navigate = useNavigate();
@@ -71,7 +72,14 @@ export default function FileView({ files, getFiles, showHidden, search}) {
   }
 
   async function deleteMultiple() {
-    var response = await DELETE(`${API_URL}/delete-multiple`, checks)
+    console.log("TOKEN here")
+
+    var token = localStorage.getItem("@toshi-cloud")
+    console.log(token)
+    var response = await axios.delete(`${API_URL}/delete-multiple`, {
+      data: checks,
+      headers: {"Authorization": "Bearer " + token
+    }})
     setDeleteMultipleModal(false)
     setChecks([])
   }

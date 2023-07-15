@@ -1,41 +1,57 @@
-import React, { useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { get, API_URL } from "../../utils/API";
+import axios from "axios";
 
 export default function Content() {
-    const [content, setContent] = useState(null)
-    const [type, setType] = useState("")
-    const { fileUuid } = useParams();
+  const [content, setContent] = useState(null);
+  const [type, setType] = useState("");
+  const { fileUuid } = useParams();
 
-    useEffect(() => {
-        const getContent = async () => {
-            try {
-                let response = await fetch(`${API_URL}/file/content/${fileUuid}`).then(response => response.blob()).then(async (blob) =>
-                {
+  useEffect(() => {
+    console.log(fileUuid);
+    const getContent = async () => {
+      try {
+        var token = localStorage.getItem("@toshi-cloud");
+        var response = await axios.get(`/file/content/${fileUuid && fileUuid}`, {
+          baseURL: process.env.REACT_APP_API_URL, // Set the base URL
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+          responseType: "blob", // Set the response type to "blob"
+        });
 
-                    var contentType = blob.type
-                    if (contentType === "text/plain") {
-                        var text = await blob.text()
-                        setContent(text)
-                        setType(contentType)
-                    }
-                    if (contentType === "image/jpg" || contentType === "image/gif") {
-                        var objectURL = URL.createObjectURL(blob);
-                        setContent(objectURL)
-                        setType(contentType)
-                    }
-                })
-            } catch {return}
+        var blob = new Blob([response.data]);
+        var contentType = response.headers["content-type"];
+
+        if (contentType.includes("text")) {
+          var text = await blob.text();
+          console.log("Text");
+          console.log(text);
+          setContent(text);
+          setType(contentType);
         }
-        getContent()
-    }, [])
+        if (contentType.includes("image")) {
+          var objectURL = URL.createObjectURL(blob);
+          setContent(objectURL);
+          setType(contentType);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+      console.log("Response");
+      console.log(response);
+    };
+    getContent();
+  }, [fileUuid]); // Add fileUuid as a dependency
 
-    return (
-        <div style={{background: "white", fontWeight: "bold"}}>
-        {type === "text/plain" && <pre>{content}</pre>}
-        {type.includes("image") && <img src={content}/>}
+  useEffect(() => {
+    console.log(content);
+  });
 
-
-        </div>
-    )
+  return (
+    <div style={{ background: "white", fontWeight: "bold" }}>
+      {type.includes("text") && <pre>{content && content}</pre>}
+      {type.includes("image") && <img src={content} alt=""/>}
+    </div>
+  );
 }

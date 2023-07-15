@@ -20,6 +20,7 @@ import { Routes, Route, Link, Navigate } from "react-router-dom";
 import Stream from "./pages/Stream/Stream";
 import { API_URL } from "./utils/API";
 import Content from "./pages/Content/Content";
+import Startup from "./pages/Startup";
 
 function App() {
   const user = useSelector((state) => state.user);
@@ -30,8 +31,8 @@ function App() {
   async function getFiles() {
     if (user.uuid === "") {return}
 
-    let response = await get(`${API_URL}/get-files/${user.uuid}`);
-    setFiles(response);
+    // let response = await get(`${API_URL}/get-files/${user.uuid}`);
+    // setFiles(response);
   }
 
   useEffect(() => {
@@ -39,8 +40,8 @@ function App() {
   }, []);
 
   async function downloadFile(file) {
-    console.log(file);
-    await fetch(`${API_URL}/download/${user.username}/${file.handle}`)
+    var token = localStorage.getItem("@toshi-cloud")
+    await fetch(`${API_URL}/download/${user.username}/${file.handle}`, {headers: {"authorization": "Bearer " + token}})
       .then((response) => response.blob())
       .then((blob) => {
         var url = window.URL.createObjectURL(blob);
@@ -53,16 +54,13 @@ function App() {
       });
   }
 
-
+//   : <Login getFiles={getFiles} />
   return (
     <div className="">
       <Routes>
-        <Route
-          path="/"
-          element={
-              user.isLoggedIn ?   <Main/>   : <Login getFiles={getFiles} />
-          }
-        />
+        <Route path="/" element={<Startup/>}/>
+        <Route path="/home" element={<Main/>}/>
+  
         <Route path="/stream/:fileUuid" element={<Stream/>} />
         <Route path="/content/:fileUuid" element={<Content />} />
       </Routes>

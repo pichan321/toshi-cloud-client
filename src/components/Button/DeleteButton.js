@@ -2,14 +2,15 @@ import React from "react";
 import Button from 'rsuite/Button';
 import { useState } from "react";
 import {get, API_URL} from '../../utils/API'
-
+import axios from "axios";
 export default function DeleteButton({getFiles, file}) {
     const [loading, setLoading] = useState(false)
 
     async function deleteFile(file) {
       setLoading(true)
       try {
-        var response = await get(`${API_URL}/file/delete/${file.uuid}`)
+        var token = localStorage.getItem("@toshi-cloud")
+        var response = await axios.get(`${API_URL}/file/delete/${file.uuid}`, {headers: {"Authorization": "Bearer " + token}})
         getFiles()
       } catch {
         return
