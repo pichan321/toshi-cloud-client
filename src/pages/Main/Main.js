@@ -223,18 +223,22 @@ export default function Main() {
     return (
       <>
         <div className='background'>
+          <div className=''>
           <div className='grid grid-cols-12'>
-            <div className='col-span-4'>
+            <div className='col-span-3'>
                 <Upload user={user}/>
                 <Checkbox style={{color: "white"}} checked={showHidden} onChange={(e, checked) => setShowHidden(checked)}>Show Hidden Files</Checkbox>
             </div>
-            <div className='col-span-6'>
+            <div className='col-span-6 flex items-center justify-center '>
+
                 <InputGroup inside style={{zIndex: 999}}>
-                  <Input placeholder={"Search file"} onChange={(e) => setSearch(e)}/>
-                  <InputGroup.Button>
-                    <SearchIcon onClick={() => getFiles()}/>
-                  </InputGroup.Button>
-                </InputGroup>
+                    <Input placeholder={"Search file"} onChange={(e) => setSearch(e)}/>
+                    <InputGroup.Button>
+                      <SearchIcon onClick={() => getFiles()}/>
+                    </InputGroup.Button>
+                  </InputGroup>
+
+           
             </div>
             <div className=''>
             <div style={{position: "absolute", right: "1em", top: "1em"}}>
@@ -282,8 +286,9 @@ export default function Main() {
 
             </div>
           </div>
-          <div>
 
+
+          <div className='overflow-y-hidden' style={{height: "80vh"}}>
             <FileView files={files} getFiles={getFiles} showHidden={showHidden} search={search}/>
           </div>
 
@@ -305,21 +310,7 @@ export default function Main() {
 
      : null } */}
 
-
-
-
-<div className='container-fluid'>
-<div className='row'>
-  <div className='col-12'>
-    <div className="ag-theme-alpine-dark ag-grid-container">
-
-  
-
-    </div>
-  </div>
-      
-</div>
-      
+       
 </div> 
         
       </>

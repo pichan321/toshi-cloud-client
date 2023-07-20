@@ -5,7 +5,6 @@ import "rsuite/dist/rsuite.min.css";
 import "./App.css";
 
 import { Routes, Route} from "react-router-dom";
-
 import Main from "./pages/Main/Main";
 import Stream from "./pages/Stream/Stream";
 import Content from "./pages/Content/Content";
