@@ -43,8 +43,6 @@
 }
 
 .background {
-    overflow-x: hidden;
-    overflow-y: hidden;
     width: 100vw;
     height: 100vh;
     background-color: #a9a7ae;
